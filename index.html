@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Picture Rail</title>
+<meta name="description" content="Picture Rail builds sales pages for makers whose art hangs on walls. Watch a real room get hung and repainted as you scroll, then choose Own it for $250 or Partner for $0 upfront.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..600&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Picture Rail. A real photographed room: prints hang on its wall, the wall repaints, the prints follow.
+   Palette is taken from the room itself (gallery white, ink, denim, sage, oat). Type: Bodoni Moda for display, Hanken Grotesk for text.
+   Brand idea: a picture rail, the molding art hangs from. Things on this page hang from it. */
+:root{
+  --bg:#F5F6F3;--surface:#FFFFFF;--ink:#1B2234;--muted:#566074;--line:#DCDFD8;--line2:#B9BFB8;
+  --brand:#2F3E66;--brand-ink:#FFFFFF;--oat:#E8DAC6;--sage:#A9BBA0;--denim:#3F4E73;--paper:#FBFAF6;--deep:#1B2234;--deep-ink:#F5F6F3;
+  --serif:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif;--sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --gut:max(clamp(20px,5.5vw,88px),env(safe-area-inset-left,0px));--gutr:max(clamp(20px,5.5vw,88px),env(safe-area-inset-right,0px));
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12161F;--surface:#1B2130;--ink:#EEF0EC;--muted:#A5ACBA;--line:#2B3345;--line2:#434C61;--brand:#E8DAC6;--brand-ink:#1B2234;--deep:#EEF0EC;--deep-ink:#1B2234;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12161F;--surface:#1B2130;--ink:#EEF0EC;--muted:#A5ACBA;--line:#2B3345;--line2:#434C61;--brand:#E8DAC6;--brand-ink:#1B2234;--deep:#EEF0EC;--deep-ink:#1B2234;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.62 var(--sans);overflow-x:hidden}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{font-family:var(--serif);font-weight:500;font-variation-settings:"opsz" 30;letter-spacing:-.022em;line-height:1.04;text-wrap:balance}
+a{color:inherit}
+::selection{background:var(--sage);color:#141413}
+:focus-visible{outline:3px solid var(--brand);outline-offset:3px;border-radius:4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 26px;border:0;border-radius:6px;background:var(--brand);color:var(--brand-ink);font:500 1rem var(--sans);text-decoration:none;cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,background .2s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px -14px rgba(27,34,52,.8)}
+.btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+.btn.line:hover{background:rgba(27,34,52,.05);box-shadow:inset 0 0 0 1px var(--ink)}
+.btn.oat{background:var(--oat);color:#1B2234}
+.btn.ink{background:#1B2234;color:#F5F6F3}
+
+/* ---------- pinned stage ---------- */
+.track{position:relative;height:620vh}
+.stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:#d9d5d0 url(img/plate.jpg) center/cover no-repeat;isolation:isolate}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .9s ease}
+.ready #gl{opacity:1}
+.vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(20,24,36,.2) 100%)}
+.shade{position:absolute;left:0;right:0;bottom:0;height:36%;pointer-events:none;background:linear-gradient(to top,rgba(20,24,36,.3),rgba(20,24,36,0))}
+.grain{position:absolute;inset:-50%;width:200%;height:200%;pointer-events:none;opacity:.07;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
+.nav{position:absolute;z-index:5;top:max(14px,env(safe-area-inset-top,0px));left:var(--gut);right:var(--gutr);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.pill{background:rgba(247,248,245,.9);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#1B2234;border-radius:8px;box-shadow:0 0 0 1px rgba(27,34,52,.08),0 8px 20px -14px rgba(27,34,52,.35)}
+.brand,.lh b,footer .mark{font-variation-settings:"opsz" 11}
+.brand{display:flex;align-items:center;gap:10px;padding:9px 16px 9px 13px;font:500 1.12rem var(--serif);letter-spacing:-.01em;text-decoration:none}
+.brand svg{display:block;color:#1B2234}
+.navlink{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;font:500 .93rem var(--sans);text-decoration:none}
+.navlink.pill{background:#1B2234;color:#F5F6F3;box-shadow:none}
+.hero{position:absolute;z-index:3;left:var(--gut);right:var(--gutr);top:17%;text-align:left;color:#1B2234;pointer-events:none;will-change:opacity,transform}
+.hero h1{font-weight:400;font-size:clamp(3rem,7.6vw,7.6rem);max-width:9.2em;letter-spacing:-.03em;line-height:.97}
+.hero p.lead{margin:24px 0 0;max-width:30em;font-size:clamp(1.08rem,1.7vw,1.3rem);color:#2E3750}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.hero .btn{pointer-events:auto;min-height:56px;padding:0 30px;font-size:1.04rem}
+.hero .btn.line{background:rgba(247,248,245,.55);box-shadow:inset 0 0 0 1.5px #1B2234;color:#1B2234;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.cue{position:absolute;z-index:3;left:50%;transform:translateX(-50%);bottom:calc(26px + env(safe-area-inset-bottom,0px));display:flex;align-items:flex-end;gap:12px;color:#1B2234;font:500 .9rem var(--sans);pointer-events:none}
+.cue b{display:block;width:1.5px;height:46px;background:linear-gradient(#1B2234,transparent);transform-origin:top;animation:cue 2.2s ease-in-out infinite}
+@keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+.chips{position:absolute;z-index:4;top:calc(max(14px,env(safe-area-inset-top,0px)) + 62px);left:50%;transform:translateX(-50%);display:flex;gap:4px;padding:5px;opacity:var(--co,0);pointer-events:none}
+.chips.on{pointer-events:auto}
+.chip{white-space:nowrap;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:0;border-radius:5px;background:transparent;color:#454E66;font:500 .85rem var(--sans);cursor:pointer;transition:background .35s,color .35s}
+.chip i{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.22);display:block}
+.chip[aria-pressed="true"]{background:#1B2234;color:#F5F6F3}
+.cap{position:absolute;z-index:4;left:var(--gut);bottom:max(11vh,36px);width:min(272px,calc(100% - 2*var(--gut)));padding:16px 18px 18px;opacity:var(--o,0);transform:translateY(calc((1 - var(--o,0))*22px));pointer-events:none;will-change:opacity,transform}
+.cap.pill{background:#FBFAF6!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-radius:2px;box-shadow:0 0 0 1px #D6D3C8,0 18px 30px -20px rgba(27,34,52,.6)}
+.cap h2{font:500 1.38rem/1.18 var(--serif);font-variation-settings:"opsz" 18;letter-spacing:-.01em}
+.cap p{margin-top:8px;color:#4A5268;font-size:.95rem;line-height:1.5}
+.cap .try{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:16px;pointer-events:none}
+.cap.live .try{pointer-events:auto}
+.try .btn{min-height:44px;padding:0 18px}
+.try span{font-size:.84rem;color:#454E66;max-width:15em;line-height:1.35}
+.bar{position:absolute;z-index:6;left:0;top:0;height:3px;width:calc(var(--p,0)*100%);background:#3F4E73}
+.nogl .track{height:auto}.nogl .stick{height:92svh}.nogl .cue,.nogl .chips{display:none}
+.hero.static{position:relative;top:auto;left:auto;right:auto;opacity:1!important;transform:none!important;padding:clamp(88px,14vw,150px) var(--gutr) 36px var(--gut);pointer-events:auto}
+
+/* ================= LOWER HALF: the gallery after the story =================
+   Art direction: the room keeps going. Each section is another wall of the same gallery, lit differently.
+   1 sage wall: what buyers see (phone set on the wall, leader-line labels)
+   2 chalk wall: two framed pieces hanging from one rail, with museum labels
+   3 night wall: denim, a taped letter and paper slips; picture rail overhead; skirting board under */
+.wall{position:relative;isolation:isolate}
+.wall:after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.5;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .22 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
+.w-in{max-width:1160px;margin:0 auto;padding-inline:var(--gut) var(--gutr)}
+.sub{margin-top:22px;font-size:1.12rem;line-height:1.6}
+.wall h2,.note h2{margin-bottom:0}
+.kicker{font:500 .95rem var(--sans);letter-spacing:.02em;color:inherit;opacity:.78;margin-bottom:18px;display:block}
+.wall h2{font-weight:400;font-size:clamp(2.4rem,5.6vw,4.4rem);line-height:1;max-width:11em}
+.skirt{height:26px;background:linear-gradient(#EFEFEA 0 3px,#E4E4DE 3px 20px,#BDBDB5 20px 26px);box-shadow:0 -1px 0 rgba(27,34,52,.12)}
+
+/* 1 / sage wall */
+#specimen{background:#A9BBA0;color:#16221B;padding-block:clamp(84px,12vw,150px) clamp(84px,12vw,150px)}
+#specimen .sub{color:#243329;opacity:.92;max-width:27em}
+.spec{display:grid;grid-template-columns:1fr minmax(300px,380px) 1fr;gap:clamp(24px,4vw,64px);align-items:center;margin-top:clamp(28px,4vw,48px)}
+.callouts{display:grid;gap:clamp(48px,9vw,120px)}
+.callouts.right{align-content:center}
+.co{position:relative;font:500 1.12rem/1.4 var(--sans);max-width:15em;padding-top:16px;border-top:1.5px solid #16221B}
+.co:before{content:"";position:absolute;top:-6px;width:10px;height:10px;border-radius:50%;background:#16221B}
+.callouts.left .co{justify-self:end;text-align:right}.callouts.left .co:before{right:0}
+.callouts.right .co:before{left:0}
+.co small{display:block;margin-top:6px;font:400 .95rem/1.4 var(--sans);opacity:.8}
+.phone{background:#141C2E;border-radius:44px;padding:12px;box-shadow:0 0 0 1px rgba(255,255,255,.08) inset,0 50px 70px -40px rgba(10,20,14,.75),0 18px 30px -18px rgba(10,20,14,.4)}
+.phone.hero-ph{width:100%;transform:rotate(-1deg)}
+.screen{background:#fff;color:#1B2234;border-radius:34px;overflow:hidden}
+.screen img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover}
+.ui{padding:20px 22px 24px}
+.ui .tag{font:500 .86rem var(--sans);color:#566074}
+.ui h3{margin-top:6px;font-size:1.65rem;font-weight:500;line-height:1.08}
+.ui .blurb{margin-top:8px;font-size:.98rem;color:#566074;line-height:1.45}
+.ui .row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px}
+.ui .pr{font:500 2.1rem/1 var(--serif);font-variation-settings:"opsz" 28}
+.ui .add{background:#1B2234;color:#F5F6F3;font:500 1rem var(--sans);padding:13px 22px;border-radius:5px}
+.swatch-row{display:flex;gap:10px;margin-top:16px}
+.swatch-row i{width:26px;height:26px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(27,34,52,.2)}
+
+/* 2 / chalk wall, framed pieces */
+#offers{background:#EEEFEA;color:var(--ink);padding-block:clamp(84px,12vw,150px) clamp(96px,13vw,170px)}
+#offers .sub{color:#4B5468;max-width:28em}
+.railwrap{position:relative;margin-top:clamp(56px,8vw,96px);padding-top:70px}
+.rail{position:absolute;top:0;left:-6vw;right:-6vw;height:16px;background:linear-gradient(#F6F1E7 0 2px,#E8DAC6 2px 11px,#BFAE8E 11px 16px);box-shadow:0 10px 14px -6px rgba(27,34,52,.35)}
+.pieces{display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,5vw,72px);align-items:start}
+.piece{position:relative;transform-origin:50% -70px}
+.piece .wire{position:absolute;top:-62px;left:0;width:100%;height:64px;overflow:visible;color:#1B2234;pointer-events:none}
+.piece .nail{position:absolute;top:-70px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#C9B796,#6B5B3E 75%);box-shadow:0 2px 3px rgba(27,34,52,.5)}
+.frame{position:relative;padding:clamp(12px,1.4vw,18px);box-shadow:0 34px 40px -26px rgba(27,34,52,.65),0 3px 0 rgba(27,34,52,.15)}
+.frame.black{background:linear-gradient(135deg,#3A3735,#141210 55%,#0C0B0A)}
+.frame.oak{background:linear-gradient(135deg,#D9B98A,#C39A62 55%,#A57F4C)}
+.mat{background:#F4EFE4;padding:clamp(18px,2.4vw,34px);box-shadow:inset 0 3px 8px rgba(27,34,52,.22),inset 0 0 0 1px rgba(27,34,52,.08)}
+.print{position:relative;background:var(--sw);color:#141C2E;padding:clamp(26px,3.4vw,44px) clamp(22px,3vw,40px) clamp(26px,3.2vw,40px);isolation:isolate;box-shadow:0 0 0 1px rgba(20,28,46,.14)}
+.print:after{content:"";position:absolute;inset:0;z-index:-1;opacity:.5;mix-blend-mode:multiply;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .22 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
+.print h3{font-size:clamp(2.2rem,3.8vw,3rem);font-weight:400}
+.print .plan-tag{margin-top:10px;font-size:1.06rem;color:#222B45;max-width:19em}
+.plan-price{display:flex;align-items:flex-end;gap:12px;margin-top:clamp(26px,3.4vw,40px)}
+.amt{font:500 clamp(4.4rem,9vw,7rem)/.84 var(--serif);font-variation-settings:"opsz" 30;letter-spacing:-.045em;font-variant-numeric:lining-nums}
+.amt .cur{font:500 .3em/1 var(--sans);letter-spacing:0;vertical-align:top;position:relative;top:.5em;margin-right:.1em}
+.per{font:500 1rem/1.25 var(--sans);padding-bottom:.5rem;color:#2B3550}
+.pay{margin-top:12px;font:500 1.04rem var(--sans);color:#222B45}
+.print .btn{margin-top:26px;width:100%}
+.print .btn.line{box-shadow:inset 0 0 0 2px #141C2E;color:#141C2E;background:rgba(255,255,255,.3)}
+.print .btn.line:hover{background:rgba(20,28,46,.08)}
+.print .btn.solid{background:#141C2E;color:#F5F6F3}
+.print ul{margin:26px 0 0;padding:0;list-style:none}
+.print li{padding:15px 0;border-top:1px solid rgba(20,28,46,.32);font-size:1.08rem;line-height:1.35}
+.print li:last-child{border-bottom:1px solid rgba(20,28,46,.32)}
+.print li strong{font-weight:700}
+.label{display:inline-block;margin:26px 0 0 clamp(4px,1vw,14px);padding:12px 16px 13px;background:#FBFAF6;box-shadow:0 0 0 1px rgba(27,34,52,.14),0 8px 14px -10px rgba(27,34,52,.5);font:500 .98rem/1.35 var(--sans);color:#1B2234;max-width:21em}
+.label b{display:block;font:500 1.14rem/1.2 var(--serif);font-variation-settings:"opsz" 18}
+.label span{display:block;margin-top:4px;color:#566074;font-size:.92rem}
+.piece.rv{opacity:0;transform:translateY(-26px) rotate(-1.8deg);transition:opacity .8s ease,transform 1.4s cubic-bezier(.2,1.5,.4,1);transition-delay:var(--d,0s)}
+.piece.rv.in{opacity:1;transform:rotate(var(--rot,0deg))}
+.fine{margin-top:48px;color:#566074;font-size:.98rem;max-width:36em}
+
+/* 3 / night wall, the letter */
+.note{position:relative;margin-top:0;background:#222B45;color:#F5F6F3;padding-block:clamp(110px,14vw,170px) clamp(70px,9vw,110px);border-top:0}
+.note:before{content:"";position:absolute;top:0;left:0;right:0;height:34px;background:linear-gradient(#F6F1E7 0 2px,#E8DAC6 2px 24px,#BFAE8E 24px 34px);box-shadow:0 10px 16px -4px rgba(4,8,18,.6)}
+.note-grid{display:grid;grid-template-columns:1fr minmax(320px,.9fr);gap:clamp(36px,6vw,96px);align-items:start}
+.note h2{font-size:clamp(2.4rem,5.2vw,4rem);font-weight:400}
+.note .sub{color:rgba(245,246,243,.86);max-width:29em}
+.fld{margin-top:26px;display:grid;gap:9px}
+.fld label,fieldset legend{font:500 1rem var(--sans);color:#F5F6F3;padding:0;margin:0}
+fieldset{border:0;margin:30px 0 0;padding:0;min-inline-size:0}
+.note input[type=text],.note input[type=url]{width:100%;min-height:58px;padding:0 18px;border:0;border-radius:2px;background:#EFE6D6;color:#1B2234;font:400 1.08rem var(--sans);outline:none;box-shadow:inset 0 -3px 0 rgba(27,34,52,.14),0 8px 14px -12px rgba(0,0,0,.6);transition:box-shadow .2s,background .2s}
+.note input::placeholder{color:#7C8396}
+.note input:focus{background:#FBF6EC;box-shadow:inset 0 -3px 0 #1B2234,0 0 0 3px var(--oat)}
+.picks{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pick{min-height:48px;padding:0 20px;border:0;border-radius:2px;background:transparent;color:#F5F6F3;font:500 1rem var(--sans);cursor:pointer;box-shadow:inset 0 0 0 1px rgba(245,246,243,.5);transition:background .2s,color .2s}
+.pick:hover{background:rgba(245,246,243,.1)}
+.pick[aria-pressed="true"]{background:var(--oat);color:#141C2E;box-shadow:none}
+.hues{display:flex;flex-wrap:wrap;gap:14px 18px;margin-top:14px}
+.hue{position:relative;display:flex;flex-direction:column;align-items:center;gap:9px;padding:0;border:0;background:transparent;color:#F5F6F3;font:500 .92rem var(--sans);cursor:pointer;width:66px}
+.hue i{display:block;width:52px;height:52px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3);transition:box-shadow .2s,transform .2s}
+.hue:hover i{transform:translateY(-2px)}
+.hue[aria-pressed="true"] i{box-shadow:0 0 0 3px #222B45,0 0 0 5px var(--oat)}
+.hue[aria-pressed="true"] span{font-weight:600}
+.hue[aria-pressed="true"]::after{content:"";position:absolute;top:17px;left:calc(50% - 8px);width:16px;height:8px;border-left:2.5px solid #1B2234;border-bottom:2.5px solid #1B2234;transform:rotate(-45deg)}
+.pinned{position:sticky;top:40px}
+.pinned .cord{display:block;width:100%;height:56px;overflow:visible;color:#E8DAC6;margin-bottom:-4px}
+.letter{position:relative;background:var(--paper);color:#1B2234;border-radius:2px;padding:clamp(28px,3.4vw,46px);box-shadow:0 2px 0 rgba(20,28,46,.08),0 44px 70px -34px rgba(2,6,16,.9);transform:rotate(-.7deg);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.letter:hover{transform:rotate(0)}
+.letter:before{content:"";position:absolute;top:-14px;left:50%;width:112px;height:28px;margin-left:-56px;background:rgba(232,218,198,.92);transform:rotate(-2.5deg);box-shadow:0 1px 3px rgba(20,28,46,.2)}
+.lh{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:16px;margin-bottom:22px;border-bottom:1px solid #DDD9CE;font:500 1.1rem var(--serif)}
+.lh span{font:400 .86rem var(--sans);color:#5E6577}
+.lh b{display:flex;align-items:center;gap:9px;font-weight:500}
+#msg{font:400 1.08rem/1.7 var(--sans);min-height:11.5em}
+#msg p+p{margin-top:.85em}
+#msg .ph{color:#9AA0AE;font-style:italic}
+#msg .sg{margin-top:1.2em;font:italic 500 1.55rem/1.2 var(--serif);font-variation-settings:"opsz" 24}
+.next{margin-top:26px;font:500 .96rem var(--sans);color:#454E66}
+.lt-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:14px}
+.lt-actions .btn{min-height:56px;padding:0 32px}
+#status{color:#5E6577;font-size:.94rem;min-height:1.4em}
+
+/* ---------- footer ---------- */
+footer{background:#141A2B;color:#AEB6C8;padding:64px 0 56px;font-size:.92rem;line-height:1.7}
+footer .row{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 32px}
+footer .mark{display:flex;align-items:center;gap:14px;font:500 clamp(2rem,5vw,3.4rem)/1 var(--serif);color:#F5F6F3;letter-spacing:-.02em}
+footer .mark svg{width:44px;height:36px}
+footer a{color:#F5F6F3;text-decoration-thickness:1px;text-underline-offset:3px}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+.rv.in,.nojs .rv{opacity:1;transform:none}
+@media(max-width:860px){.spec{grid-template-columns:1fr;gap:34px}.callouts{grid-template-columns:1fr 1fr;gap:28px}.callouts.left .co{justify-self:start;text-align:left}.callouts.left .co:before{right:auto;left:0}.callouts.right{order:3}.phone.hero-ph{max-width:340px;margin:0 auto;order:2}.spec>.callouts.left{order:1}.pieces{grid-template-columns:1fr;gap:96px}.rail{left:-20px;right:-20px}.note-grid{grid-template-columns:1fr}.pinned{position:relative;top:auto}}
+@media(max-width:560px){.callouts{grid-template-columns:1fr}}
+@media(max-width:780px){.letter{transform:none}.track{height:560vh}.hero{top:18%}.hero h1{font-size:clamp(2.9rem,13vw,4rem)}.cap{bottom:max(3vh,16px)}.cue{display:none}.chip{padding:0 11px;font-size:.78rem}.navlink{display:none}.hero .ctas{gap:10px}}
+@media(prefers-reduced-motion:reduce){.rv,.hang.rv{opacity:1;transform:none;transition:none}.cue b{animation:none}#gl{transition:none}.track{height:auto}.stick{height:100svh}.btn{transition:none}}
+</style>
+<noscript><style>.rv{opacity:1;transform:none}.hero{position:relative;top:auto;padding:100px 16px 30px}.track{height:auto}.stick{height:70svh}.cue{display:none}</style></noscript>
+</head>
+<body>
+<main>
+<section class="track" id="track" aria-label="Scroll story: prints hang on a wall and the room repaints">
+ <div class="stick" id="stick">
+  <canvas id="gl" role="img" aria-label="A photographed living room. Seven framed prints hang on the wall one by one, then the wall is repainted three times and the prints change colour with it."></canvas>
+  <div class="vig"></div><div class="shade"></div><div class="grain"></div><div class="bar"></div>
+  <header class="nav">
+   <a class="brand pill" href="#top"><svg class="mk" viewBox="0 0 28 22" width="26" height="21" aria-hidden="true"><path d="M2 2H26" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M14 2L7 9.5M14 2L21 9.5" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="5.5" y="9.5" width="17" height="10.5" rx="1" fill="none" stroke="currentColor" stroke-width="2"/></svg>Picture Rail</a>
+   <a class="navlink pill" href="#offers">Two ways to start</a>
+  </header>
+  <div class="hero" id="hero">
+   <h1>Let them hang your art before they buy it.</h1>
+   <p class="lead">A sales page that shows your art on a real wall, in the colours your buyer wants. Scroll, and watch this one do it.</p>
+   <div class="ctas"><a class="btn" href="#offers">See the two ways to start</a><button class="btn line" id="heroTry" type="button">Try it with your art</button></div>
+  </div>
+  <div class="chips pill" id="chips" role="group" aria-label="Wall paint">
+   <button class="chip" type="button" data-i="0" aria-pressed="true"><i style="background:#E3E4DE"></i>Chalk</button>
+   <button class="chip" type="button" data-i="1" aria-pressed="false"><i style="background:#A9BBA0"></i>Sage</button>
+   <button class="chip" type="button" data-i="2" aria-pressed="false"><i style="background:#5A6B90"></i>Denim</button>
+  </div>
+  <div class="cap pill" id="c0"><h2>Your buyers see your art on a real wall before they pay.</h2><p>An example: the Quiet Corner Gallery Bundle, 24 prints, 3 palettes, 5 sizes, $19.</p></div>
+  <div class="cap pill" id="c1"><h2>They can judge the paper, the mat and the glass.</h2><p>Every size from 5x7 to 24x36 looks as it will on their wall.</p></div>
+  <div class="cap pill" id="c2"><h2>Three wall colours, one download.</h2><p>Buyers pick the one that matches their room, and every print follows.</p></div>
+  <div class="cap pill" id="c3"><h2>Now try yours.</h2><p>Put one of your own pictures on this wall.</p><div class="try"><button class="btn ink" id="tryBtn" type="button">Hang my own art</button><input id="up" type="file" accept="image/*" hidden><span id="tryNote" role="status" aria-live="polite">It stays on your device.</span></div></div>
+  <div class="cue" aria-hidden="true"><b></b><span>Scroll</span></div>
+ </div>
+</section>
+
+<div id="top"></div>
+<section class="wall" id="specimen">
+ <div class="w-in">
+  <span class="kicker rv">What your buyers see</span>
+  <h2 class="rv">Your art, on a wall they can picture.</h2>
+  <p class="sub rv" style="margin-top:22px;font-size:1.16rem">Every buyer lands on a page like this one: your prints hung in a real room, in the wall colour they pick, with one price and one button.</p>
+  <div class="spec">
+   <div class="callouts left">
+    <div class="co rv">Your prints, hung on a real wall<small>So they can judge the paper, the mat and the frame.</small></div>
+    <div class="co rv" style="--d:.1s">Three wall colours<small>The buyer picks the one that matches their room.</small></div>
+   </div>
+   <div class="phone hero-ph rv" style="--d:.08s">
+    <div class="screen">
+     <img src="img/specimen.jpg" width="1200" height="1200" alt="The example page on a phone: framed prints hanging on a sage green wall above a sofa.">
+     <div class="ui">
+      <p class="tag">Example product</p>
+      <h3>The Quiet Corner Gallery Bundle</h3>
+      <p class="blurb">24 prints, 3 wall colours, 5 sizes. Instant download.</p>
+      <div class="swatch-row" aria-hidden="true"><i style="background:#E3E4DE"></i><i style="background:#A9BBA0"></i><i style="background:#5A6B90"></i></div>
+      <div class="row"><span class="pr">$19</span><span class="add" aria-hidden="true">Add to cart</span></div>
+     </div>
+    </div>
+   </div>
+   <div class="callouts right">
+    <div class="co rv" style="--d:.16s">One price, one button<small>No clutter between the art and the sale.</small></div>
+   </div>
+  </div>
+ </div>
+</section>
+<div class="skirt" aria-hidden="true"></div>
+
+<section class="wall" id="offers">
+ <div class="w-in">
+  <span class="kicker rv">Two ways to get your page</span>
+  <h2 class="rv">Pay once, or pay nothing until you sell.</h2>
+  <p class="sub rv" style="margin-top:22px;font-size:1.16rem">Both get you the page you just scrolled, built around your art and ready for your Pinterest pins to land on. You can change your mind later.</p>
+  <div class="railwrap">
+   <div class="rail" aria-hidden="true"></div>
+   <div class="pieces">
+    <div class="piece rv" style="--rot:-.5deg"><svg class="wire" viewBox="0 0 100 64" preserveAspectRatio="none" aria-hidden="true"><path d="M50 0L8 64M50 0L92 64" stroke="currentColor" stroke-width="1.2" fill="none" vector-effect="non-scaling-stroke"/></svg><i class="nail"></i>
+     <div class="frame black"><div class="mat"><article class="print" style="--sw:#E6D8C3">
+      <h3>Own it</h3><p class="plan-tag">Pay once. Keep every sale.</p>
+      <div class="plan-price"><span class="amt"><span class="cur">$</span>250</span><span class="per">USD</span></div>
+      <p class="pay">You pay $250 once.</p>
+      <a class="btn line" href="#start" data-pick="own">Choose Own it</a>
+      <ul><li>Your page, built and styled for you</li><li>You keep <strong>100%</strong> of every sale</li><li>Yours for good, nothing to share</li></ul>
+     </article></div></div>
+     <p class="label"><b>Own it</b><span>Pay once. Yours to keep.</span></p>
+    </div>
+    <div class="piece rv" style="--d:.16s;--rot:.45deg"><svg class="wire" viewBox="0 0 100 64" preserveAspectRatio="none" aria-hidden="true"><path d="M50 0L8 64M50 0L92 64" stroke="currentColor" stroke-width="1.2" fill="none" vector-effect="non-scaling-stroke"/></svg><i class="nail"></i>
+     <div class="frame oak"><div class="mat"><article class="print" style="--sw:#A9BBA0">
+      <h3>Partner</h3><p class="plan-tag">No cost to start. We take half of each sale.</p>
+      <div class="plan-price"><span class="amt"><span class="cur">$</span>0</span><span class="per">USD</span></div>
+      <p class="pay">You pay nothing until a sale happens.</p>
+      <a class="btn solid" href="#start" data-pick="partner">Choose Partner</a>
+      <ul><li>The same page, nothing to pay today</li><li>We take <strong>50%</strong> of each sale, you keep <strong>50%</strong></li><li>Switch to Own it any time</li></ul>
+     </article></div></div>
+     <p class="label"><b>Partner</b><span>Pay as you sell. Switch any time.</span></p>
+    </div>
+   </div>
+  </div>
+  <p class="fine rv">Shown on this page: the Quiet Corner Gallery Bundle, an example product. It is not a real store.</p>
+ </div>
+</section>
+
+<section class="note" id="start">
+ <div class="w-in note-grid">
+  <div>
+   <span class="kicker rv">One last step</span>
+   <h2 class="rv">Tell us about your art.</h2>
+   <p class="sub rv">Answer what you like and we write the message for you. You stay in control: read it, copy it, and paste it into your reply. Nothing is sent from this page.</p>
+   <div class="fld rv"><label for="f-name">Your name</label><input id="f-name" type="text" autocomplete="name" placeholder="Maya Okafor"></div>
+   <div class="fld rv"><label for="f-make">What do you make?</label><input id="f-make" type="text" placeholder="Boho gallery-wall printables"></div>
+   <div class="fld rv"><label for="f-link">Your Pinterest or shop link</label><input id="f-link" type="url" inputmode="url" autocomplete="url" placeholder="pinterest.com/yourname"></div>
+   <fieldset class="rv"><legend>Which way feels right?</legend>
+    <div class="picks" role="group" aria-label="Which option">
+     <button class="pick" type="button" data-opt="own" aria-pressed="true">Own it, $250</button>
+     <button class="pick" type="button" data-opt="partner" aria-pressed="false">Partner, $0 upfront</button>
+    </div></fieldset>
+   <fieldset class="rv"><legend>Colours you love</legend>
+    <div class="hues" role="group" aria-label="Colours you love">
+     <button class="hue" type="button" data-c="chalk" aria-pressed="false"><i style="background:#E3E4DE"></i><span>Chalk</span></button>
+     <button class="hue" type="button" data-c="sage" aria-pressed="false"><i style="background:#A9BBA0"></i><span>Sage</span></button>
+     <button class="hue" type="button" data-c="denim" aria-pressed="false"><i style="background:#5A6B90"></i><span>Denim</span></button>
+     <button class="hue" type="button" data-c="ink" aria-pressed="false"><i style="background:#1B2234"></i><span>Ink</span></button>
+    </div></fieldset>
+  </div>
+  <div class="pinned rv" style="--d:.1s">
+   <svg class="cord" viewBox="0 0 100 56" preserveAspectRatio="none" aria-hidden="true"><path d="M50 0L22 56M50 0L78 56" stroke="currentColor" stroke-width="1.2" fill="none" vector-effect="non-scaling-stroke"/></svg>
+   <aside class="letter" aria-label="Your message, live preview">
+    <div class="lh"><b><svg class="mk" viewBox="0 0 28 22" width="26" height="21" aria-hidden="true"><path d="M2 2H26" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M14 2L7 9.5M14 2L21 9.5" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="5.5" y="9.5" width="17" height="10.5" rx="1" fill="none" stroke="currentColor" stroke-width="2"/></svg>Picture Rail</b><span id="lt-date"></span></div>
+    <div id="msg" aria-live="polite"></div>
+    <p class="next">Paste it into your reply to our message and we take it from there.</p>
+    <div class="lt-actions"><button class="btn ink" id="copy" type="button">Copy message</button><span id="status" role="status" aria-live="polite"></span></div>
+   </aside>
+  </div>
+ </div>
+</section>
+<div class="skirt" aria-hidden="true" style="background:linear-gradient(#2B3556 0 3px,#222B45 3px 20px,#141A2B 20px 26px)"></div>
+
+<footer>
+ <div class="w-in">
+  <div class="row"><span class="mark"><svg class="mk" viewBox="0 0 28 22" width="26" height="21" aria-hidden="true"><path d="M2 2H26" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M14 2L7 9.5M14 2L21 9.5" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="5.5" y="9.5" width="17" height="10.5" rx="1" fill="none" stroke="currentColor" stroke-width="2"/></svg>Picture Rail</span><span>Example page, example product. Prices in USD.</span></div>
+  <p style="margin-top:22px;max-width:46em">Room photo by <a href="https://unsplash.com/@kropachev" target="_blank" rel="noopener">Dmitry Kropachev</a> on <a href="https://unsplash.com/photos/three-abstract-art-pieces-hang-above-a-gray-sofa-NaqJJyzex08" target="_blank" rel="noopener">Unsplash</a>. The three original frames were painted out and replaced. Prints are drawn in the browser.</p>
+ </div>
+</footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+"use strict";
+var root=document.documentElement;
+var $=function(id){return document.getElementById(id)};
+var RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+var clamp=function(v,a,b){a=a===undefined?0:a;b=b===undefined?1:b;return Math.min(b,Math.max(a,v))};
+var seg=function(p,a,b){return clamp((p-a)/(b-a))};
+var lerp=function(a,b,t){return a+(b-a)*t};
+var sm=function(t){return t*t*(3-2*t)};
+var sm5=function(t){return t*t*t*(t*(t*6-15)+10)};
+var eo=function(t){return 1-Math.pow(1-t,3)};
+function rng(s){return function(){s|=0;s=s+0x6D2B79F5|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+/* ============ reveal + copy box (works without WebGL) ============ */
+(function(){
+ var els=[].slice.call(document.querySelectorAll(".rv"));
+ if(!("IntersectionObserver" in window)){els.forEach(function(e){e.classList.add("in")});return}
+ var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target)}})},{threshold:.12});
+ els.forEach(function(e){io.observe(e)});
+ setTimeout(function(){els.forEach(function(e){e.classList.add("in")})},4500);
+})();
+var state={opt:"own",colors:[]};
+var OPT={own:"I'd love to start with the Own it option ($250 one time, and I keep 100% of my sales).",partner:"I'd love to start with the Partner option ($0 upfront, 50% of each sale to you and 50% to me, and I can switch to Own it any time)."};
+var elMsg=$("msg"),fName=$("f-name"),fMake=$("f-make"),fLink=$("f-link"),picks=[].slice.call(document.querySelectorAll(".pick")),hues=[].slice.call(document.querySelectorAll(".hue"));
+function esc(t){return t.replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
+function list(a){return a.length<2?a.join(""):a.slice(0,-1).join(", ")+" and "+a[a.length-1]}
+function build(){
+ var n=fName.value.trim(),m=fMake.value.trim(),l=fLink.value.trim(),c=state.colors,t=[],h=[];
+ t.push(n?"Hi! I'm "+n+".":"Hi!");h.push(n?"Hi! I'm "+esc(n)+".":"Hi! I'm <span class=\"ph\">your name</span>.");
+ var mk=m?" I make "+m+".":"";t[0]+=mk;h[0]+=m?" I make "+esc(m)+".":" I make <span class=\"ph\">what you make</span>.";
+ t.push(OPT[state.opt]);h.push(OPT[state.opt]);
+ if(l){t.push("You can find my work here: "+l);h.push("You can find my work here: "+esc(l))}
+ if(c.length){var s2="I'd like my page in colours like "+list(c)+".";t.push(s2);h.push(s2)}
+ t.push("Thank you!");h.push("Thank you!");
+ return{text:t.join("\n\n")+(n?"\n"+n:""),html:h.map(function(x){return"<p>"+x+"</p>"}).join("")+(n?"<p class=\"sg\">"+esc(n)+"</p>":"")}
+}
+function paint(){elMsg.innerHTML=build().html;picks.forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.opt===state.opt))})}
+$("lt-date").textContent=new Date().toLocaleDateString(undefined,{month:"long",day:"numeric"});
+[fName,fMake,fLink].forEach(function(f){f.addEventListener("input",paint)});
+picks.forEach(function(b){b.addEventListener("click",function(){state.opt=b.dataset.opt;paint()})});
+hues.forEach(function(b){b.addEventListener("click",function(){var c=b.dataset.c,i=state.colors.indexOf(c);if(i<0)state.colors.push(c);else state.colors.splice(i,1);b.setAttribute("aria-pressed",String(i<0));paint()})});
+[].forEach.call(document.querySelectorAll("[data-pick]"),function(a){a.addEventListener("click",function(){state.opt=a.dataset.pick;paint()})});
+paint();
+$("copy").addEventListener("click",function(){
+ var st=$("status"),txt=build().text;
+ function manual(){var r=document.createRange();r.selectNodeContents(elMsg);var sel=getSelection();sel.removeAllRanges();sel.addRange(r);st.textContent="Selected. Press Ctrl+C (Cmd+C on Mac), then paste it into your reply."}
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){st.textContent="Copied. Now paste it into your reply."},manual)}else manual();
+});
+
+/* ============ palettes: wall paint + print colours ============ */
+var PAL=[
+ {wall:"#E3E4DE",paper:"#F3F3EE",a:"#3F4E73",b:"#B9AE9E",c:"#5F7459",d:"#E1D3BC",ink:"#1B2234"},
+ {wall:"#A9BBA0",paper:"#EFF2EA",a:"#5F7459",b:"#C8D4C0",c:"#2D4A40",d:"#E8DAC6",ink:"#1B2A25"},
+ {wall:"#5A6B90",paper:"#EDEBE4",a:"#26365E",b:"#D2C6AC",c:"#A9BBA0",d:"#9FB1CF",ink:"#141C33"}];
+function mk(w,h){var c=document.createElement("canvas");c.width=Math.max(2,Math.round(w));c.height=Math.max(2,Math.round(h));return c}
+var noiseTile=(function(){var c=mk(128,128),g=c.getContext("2d"),d=g.createImageData(128,128),r=rng(7);for(var i=0;i<d.data.length;i+=4){var v=226+r()*29;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}g.putImageData(d,0,0);return c})();
+
+/* ---- the seven prints, drawn in a 100-unit-wide space ---- */
+function blob(g,R,cx,cy,r,col){var n=9,pts=[],i;for(i=0;i<n;i++){var a=i/n*Math.PI*2,rr=r*(.78+R()*.4);pts.push([cx+Math.cos(a)*rr,cy+Math.sin(a)*rr])}
+ g.fillStyle=col;g.beginPath();var m0=[(pts[0][0]+pts[n-1][0])/2,(pts[0][1]+pts[n-1][1])/2];g.moveTo(m0[0],m0[1]);
+ for(i=0;i<n;i++){var p=pts[i],q=pts[(i+1)%n];g.quadraticCurveTo(p[0],p[1],(p[0]+q[0])/2,(p[1]+q[1])/2)}g.closePath();g.fill()}
+function paintArt(kind,W,H,P,seed){
+ var c=mk(W,H),g=c.getContext("2d"),R=rng(seed*97+kind*13+5),u=W/100,h=H/u,i,j;
+ g.fillStyle=P.paper;g.fillRect(0,0,W,H);g.save();g.scale(u,u);
+ if(kind===0){var cx=50,base=h*.84,rs=[38,29,20,11],cs=[P.a,P.b,P.c,P.d];
+  for(i=0;i<4;i++){var r=rs[i];g.fillStyle=cs[i];g.beginPath();g.moveTo(cx-r,base);g.lineTo(cx-r,base-r);g.arc(cx,base-r,r,Math.PI,0);g.lineTo(cx+r,base);g.closePath();g.fill()}
+  g.fillStyle=P.ink;g.fillRect(14,base,72,.7);g.beginPath();g.arc(cx,h*.14,4.5,0,7);g.fillStyle=P.c;g.fill()}
+ else if(kind===1){g.fillStyle=P.d;g.beginPath();g.arc(50,h*.4,25,0,7);g.fill();
+  var ys=[.6,.72,.84],cs2=[P.c,P.a,P.b];for(i=0;i<3;i++){g.fillStyle=cs2[i];g.beginPath();g.moveTo(0,h);g.lineTo(0,h*ys[i]);
+   g.bezierCurveTo(25,h*ys[i]-9+i*3,45,h*ys[i]+8,70,h*ys[i]-4);g.bezierCurveTo(85,h*ys[i]-9,95,h*ys[i]+2,100,h*ys[i]-3);g.lineTo(100,h);g.closePath();g.fill()}}
+ else if(kind===2){g.strokeStyle=P.ink;g.lineWidth=.9;g.lineCap="round";g.beginPath();g.moveTo(50,h*.93);g.quadraticCurveTo(46,h*.5,52,h*.12);g.stroke();
+  var lc=[P.a,P.b,P.c];for(i=0;i<7;i++){var y=h*.82-i*h*.095,side=i%2?1:-1,x=50+side*(10-i*.4);g.fillStyle=lc[i%3];g.beginPath();g.ellipse(x,y,13-i*.8,5.4-i*.25,side*-.55,0,7);g.fill()}
+  g.fillStyle=P.d;g.beginPath();g.ellipse(52,h*.1,4.5,7,.1,0,7);g.fill()}
+ else if(kind===3){blob(g,R,40,h*.34,27,P.a);g.globalAlpha=.9;blob(g,R,62,h*.54,25,P.b);blob(g,R,42,h*.74,21,P.c);g.globalAlpha=1;g.fillStyle=P.d;g.beginPath();g.arc(72,h*.22,7,0,7);g.fill()}
+ else if(kind===4){var sh=[20,12,6,-4,-15],mc=[P.c,P.a,P.c,P.a,P.c];for(i=0;i<5;i++){var cy=h*(.17+i*.165);g.fillStyle=mc[i];g.beginPath();g.arc(50,cy,10,0,7);g.fill();g.fillStyle=P.paper;g.beginPath();g.arc(50+sh[i],cy,10,0,7);g.fill()}
+  g.fillStyle=P.d;g.beginPath();g.arc(78,h*.12,2.2,0,7);g.arc(24,h*.9,1.8,0,7);g.fill()}
+ else if(kind===5){g.lineWidth=.95;var cc=[P.a,P.b,P.c];for(j=0;j<17;j++){g.strokeStyle=cc[j%3];g.beginPath();var y0=h*.08+j*(h*.84/16);
+   for(i=0;i<=50;i++){var x=i*2,y=y0+5*Math.sin(x*.06+j*.33)+4.5*Math.sin(x*.021+j*.19+1);if(i)g.lineTo(x,y);else g.moveTo(x,y)}g.stroke()}}
+ else{g.fillStyle="rgba(40,25,15,.14)";g.beginPath();g.ellipse(50,h*.83,30,3.2,0,0,7);g.fill();
+  var st=[[h*.74,27,9.5,P.c],[h*.6,21,8.5,P.a],[h*.47,15.5,7,P.b],[h*.37,10.5,5.4,P.d]];for(i=0;i<4;i++){g.fillStyle=st[i][3];g.beginPath();g.ellipse(50+(i%2?2:-2),st[i][0],st[i][1],st[i][2],0,0,7);g.fill()}
+  g.fillStyle=P.ink;g.fillRect(20,h*.83,60,.6)}
+ g.restore();
+ g.globalCompositeOperation="multiply";g.fillStyle=g.createPattern(noiseTile,"repeat");g.fillRect(0,0,W,H);
+ g.globalCompositeOperation="source-over";return c}
+
+/* ---- frames (rail, mat, bevel) drawn at S pixels per plate unit ---- */
+function drawFrame(w,h,S,st){
+ var c=mk(w*S,h*S),g=c.getContext("2d"),W=c.width,H=c.height,r=st.rail*w*S,m=st.mat*w*S,bv=Math.max(1.3,w*.0075)*S;
+ var gr=g.createLinearGradient(0,0,W,H);gr.addColorStop(0,st.rc[0]);gr.addColorStop(.5,st.rc[1]);gr.addColorStop(1,st.rc[2]);g.fillStyle=gr;g.fillRect(0,0,W,H);
+ g.fillStyle="rgba(255,255,255,.22)";g.fillRect(0,0,W,Math.max(1,S*.55));g.fillRect(0,0,Math.max(1,S*.55),H);
+ g.fillStyle="rgba(0,0,0,.28)";g.fillRect(0,H-Math.max(1,S*.55),W,S);g.fillRect(W-Math.max(1,S*.55),0,S,H);
+ g.fillStyle=st.matc;g.fillRect(r,r,W-2*r,H-2*r);
+ var sw0=Math.max(3,w*.02)*S;var s1=g.createLinearGradient(0,r,0,r+sw0);s1.addColorStop(0,"rgba(0,0,0,.22)");s1.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=s1;g.fillRect(r,r,W-2*r,sw0);
+ var s2=g.createLinearGradient(r,0,r+sw0,0);s2.addColorStop(0,"rgba(0,0,0,.14)");s2.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=s2;g.fillRect(r,r,sw0,H-2*r);
+ g.globalCompositeOperation="multiply";g.fillStyle=g.createPattern(noiseTile,"repeat");g.globalAlpha=.55;g.fillRect(r,r,W-2*r,H-2*r);g.globalAlpha=1;g.globalCompositeOperation="source-over";
+ var x0=r+m,y0=r+m,x1=W-r-m,y1=H-r-m;
+ function poly(col,p){g.fillStyle=col;g.beginPath();g.moveTo(p[0],p[1]);for(var i=2;i<p.length;i+=2)g.lineTo(p[i],p[i+1]);g.closePath();g.fill()}
+ poly("#FFFEFA",[x0-bv,y0-bv,x1+bv,y0-bv,x1,y0,x0,y0]);poly("#FBF8F0",[x0-bv,y0-bv,x0,y0,x0,y1,x0-bv,y1+bv]);
+ poly("#D8D0C0",[x0-bv,y1+bv,x0,y1,x1,y1,x1+bv,y1+bv]);poly("#E6DFD0",[x1+bv,y0-bv,x1+bv,y1+bv,x1,y1,x1,y0]);
+ return {canvas:c,win:[x0/S,y0/S,(x1-x0)/S,(y1-y0)/S]}}
+var BLACK={rail:.022,mat:.125,rc:["#3A3735","#161412","#0C0B0A"],matc:"#F1ECE1"},
+    OAK={rail:.04,mat:.115,rc:["#D9B98A","#C39A62","#A57F4C"],matc:"#F4EFE5"},
+    WHITE={rail:.035,mat:.115,rc:["#FFFFFF","#EFEBE3","#DAD4C8"],matc:"#F6F2E9"};
+function shadowTex(){var c=mk(256,256),g=c.getContext("2d");g.fillStyle="#000";g.shadowColor="#000";g.shadowBlur=34;g.fillRect(70,70,116,116);return c}
+
+/* ============ the room: plate photo, wall mask, frames ============ */
+var PW=2000,PH=1333;
+/* seven prints: center x,y in photo pixels, outer size, style, art kind */
+var FR=[
+ {x:452,y:456,w:325,h:427,st:BLACK,k:0},{x:1002,y:460,w:322,h:426,st:BLACK,k:1},{x:1551,y:459,w:328,h:428,st:BLACK,k:2},
+ {x:715,y:842,w:142,h:190,st:OAK,k:3},{x:905,y:842,w:142,h:190,st:BLACK,k:4},{x:1095,y:842,w:142,h:190,st:WHITE,k:5},{x:1285,y:842,w:142,h:190,st:OAK,k:6}];
+var HANG_L=[1,0,2,3,4,5,6],HANG_P=[0,1,2,3,4,5,6];
+
+var S0={};              /* scene state */
+var stick=$("stick"),track=$("track"),canvas=$("gl");
+var glOK=false;
+function staticHero(){var h=$("hero");if(h&&!h.classList.contains("static")){h.classList.add("static");track.parentNode.insertBefore(h,track)}}
+function noGL(){root.classList.add("nogl");staticHero()}
+if(RM)staticHero();
+
+var VS="varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}";
+var FS_PLATE=[
+"varying vec2 vUv;uniform sampler2D tP,tM;uniform vec3 uA,uB;uniform float uW,uRef,uT;uniform vec2 uSun;",
+"void main(){vec3 c=texture2D(tP,vUv).rgb;float m=smoothstep(.3,.62,texture2D(tM,vUv).r);float lum=dot(c,vec3(.299,.587,.114));float k=clamp(lum/uRef,.1,1.06);",
+" float e=vUv.x+.028*sin(vUv.y*11.+uT*.0)+.014*sin(vUv.y*29.+1.3);float s=smoothstep(uW-.011,uW+.011,e);",
+" vec3 paint=mix(uB,uA,s);vec3 t=paint*pow(k,1.08);",
+" float wet=exp(-abs(e-uW)*85.)*step(.0001,uW)*step(uW,.9999);t+=wet*.07;",
+" float d=distance(vUv*vec2(1.5,1.),uSun*vec2(1.5,1.));t*=1.+.06*exp(-d*d*5.);",
+" vec3 o=mix(mix(c,c*(paint/.87),.3),t,m);gl_FragColor=vec4(o,1.);}"].join("\n");
+var FS_ART=[
+"varying vec2 vUv;uniform sampler2D tA,tB;uniform float uMix,uShift;uniform vec2 uWin;",
+"void main(){vec3 col=mix(texture2D(tA,vUv).rgb,texture2D(tB,vUv).rgb,uMix);",
+" float dt=(1.-vUv.y)*uWin.y,dl=vUv.x*uWin.x;col*=1.-.30*exp(-dt/4.5)-.15*exp(-dl/4.5);",
+" float g=exp(-pow((vUv.x*.75+(1.-vUv.y)*.55-uShift)*5.2,2.));col+=.085*g+.02;",
+" gl_FragColor=vec4(col,1.);}"].join("\n");
+
+function imgTex(THREE,im,gl2,aniso){var t=new THREE.Texture(im);t.minFilter=gl2?THREE.LinearMipmapLinearFilter:THREE.LinearFilter;t.generateMipmaps=!!gl2;t.anisotropy=aniso;t.wrapS=t.wrapT=THREE.ClampToEdgeWrapping;t.needsUpdate=true;return t}
+function tex(THREE,canvasEl,gl2,aniso){var t=new THREE.CanvasTexture(canvasEl);t.minFilter=gl2?THREE.LinearMipmapLinearFilter:THREE.LinearFilter;t.generateMipmaps=!!gl2;t.anisotropy=aniso;t.wrapS=t.wrapT=THREE.ClampToEdgeWrapping;return t}
+
+function start(img,maskImg){
+ var THREE=window.THREE,renderer;
+ try{renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:false,powerPreference:"high-performance"})}catch(e){noGL();return}
+ var gl2=renderer.capabilities.isWebGL2,an=Math.min(8,renderer.capabilities.getMaxAnisotropy());
+ renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setClearColor(0xd9d5d0);
+ var scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(26,1,50,20000);
+ /* plate and wall mask were prepared ahead of time, so nothing heavy runs here */
+ var plateTex=imgTex(THREE,img,gl2,an),maskTex=imgTex(THREE,maskImg,false,1);maskTex.minFilter=maskTex.magFilter=THREE.LinearFilter;maskTex.generateMipmaps=false;
+ var plateMat=new THREE.ShaderMaterial({vertexShader:VS,fragmentShader:FS_PLATE,uniforms:{tP:{value:plateTex},tM:{value:maskTex},uA:{value:new THREE.Color(PAL[0].wall)},uB:{value:new THREE.Color(PAL[0].wall)},uW:{value:-1},uRef:{value:0.8671},uT:{value:0},uSun:{value:new THREE.Vector2(.3,.7)}},transparent:true,depthTest:false,depthWrite:false});
+ var plate=new THREE.Mesh(new THREE.PlaneGeometry(PW,PH),plateMat);plate.position.set(PW/2,PH/2,0);plate.renderOrder=0;scene.add(plate);
+ /* frames */
+ var shTex=new THREE.CanvasTexture(shadowTex());var SC=2.4,frames=[];
+ FR.forEach(function(f,i){
+  var big=f.w>200,S=big?SC:3.2,fd=drawFrame(f.w,f.h,S,f.st),win=fd.win;
+  var piv=new THREE.Group(),inner=new THREE.Group();piv.add(inner);inner.position.y=-f.h/2;
+  var ro=10+i*10;
+  var sh=new THREE.Mesh(new THREE.PlaneGeometry(f.w*1.3,f.h*1.22),new THREE.MeshBasicMaterial({map:shTex,transparent:true,opacity:.34,depthTest:false,depthWrite:false}));sh.renderOrder=ro;
+  var fm=new THREE.Mesh(new THREE.PlaneGeometry(f.w,f.h),new THREE.MeshBasicMaterial({map:tex(THREE,fd.canvas,gl2,an),transparent:true,depthTest:false,depthWrite:false}));fm.renderOrder=ro+1;
+  var aw=Math.round(win[2]*S),ah=Math.round(win[3]*S);
+  var ta=PAL.map(function(P,pi){return tex(THREE,paintArt(f.k,aw,ah,P,i+1),gl2,an)});
+  var am=new THREE.ShaderMaterial({vertexShader:VS,fragmentShader:FS_ART,uniforms:{tA:{value:ta[0]},tB:{value:ta[1]},uMix:{value:0},uShift:{value:0},uWin:{value:new THREE.Vector2(win[2],win[3])}},transparent:true,depthTest:false,depthWrite:false});
+  var art=new THREE.Mesh(new THREE.PlaneGeometry(win[2],win[3]),am);art.renderOrder=ro+2;
+  art.position.set(win[0]+win[2]/2-f.w/2,f.h/2-(win[1]+win[3]/2),0);
+  inner.add(sh,fm,art);sh.position.set(0,0,0);piv.visible=false;scene.add(piv);
+  frames.push({aw:aw,ah:ah,f:f,piv:piv,inner:inner,sh:sh,am:am,ta:ta,fx:f.x/PW,u:0});
+ });
+ Object.assign(S0,{gl2:gl2,an:an,renderer:renderer,scene:scene,cam:cam,plateMat:plateMat,frames:frames});
+ glOK=true;root.classList.add("ready");resize();render(true);
+}
+
+/* ============ camera ============ */
+var KL=[[0,1000,650,1190],[.09,1000,620,1140],[.42,1000,620,1110],[.50,1000,468,690],[.56,1000,468,690],[.63,1000,620,1120],[.88,1000,620,1120],[1,1000,640,1230]];
+var KP=[[0,760,820,1010],[.09,452,470,980],[.17,452,470,980],[.24,1002,470,980],[.31,1551,470,980],[.38,1000,800,1020],[.44,1000,620,1333],[.50,1000,468,780],[.56,1000,468,780],[.58,250,640,1150],[.70,1750,640,1150],[.74,250,640,1150],[.86,1750,640,1150],[.93,1000,640,1333],[1,1000,640,1333]];
+function camAt(K,p){var i=0;while(i<K.length-2&&p>K[i+1][0])i++;var a=K[i],b=K[i+1],t=sm5(seg(p,a[0],b[0]));return[lerp(a[1],b[1],t),lerp(a[2],b[2],t),lerp(a[3],b[3],t)]}
+
+/* ============ one function maps scroll progress to everything on screen ============ */
+var W1=[.58,.70],W2=[.74,.86],CAPS=[[.10,.40],[.455,.545],[.60,.85],[.905,1.01]];
+var vw=1,vh=1,portrait=false,sp=0,target=0,forced=-1,lastT=0;
+function resize(){
+ vw=stick.clientWidth;vh=stick.clientHeight;portrait=vw/vh<.95;
+ if(glOK){S0.renderer.setSize(vw,vh,false);S0.cam.aspect=vw/vh;S0.cam.updateProjectionMatrix()}
+ render(true);
+}
+function setCam(p,time){
+ var c=camAt(portrait?KP:KL,p),asp=vw/vh,h=Math.min(c[2],PH,PW/asp),hw=h*asp/2;
+ var cx=portrait&&p>.575&&p<.875?c[0]:c[0];
+ cx=clamp(cx,hw,PW-hw);var cy=clamp(c[1],h/2,PH-h/2);
+ cx+=Math.sin(time*.00031)*2.2;cy+=Math.cos(time*.00027)*1.6;
+ var cam=S0.cam,dist=h/(2*Math.tan(cam.fov*Math.PI/360));
+ cam.position.set(cx,PH-cy,dist);cam.lookAt(cx,PH-cy,0);cam.updateMatrixWorld();
+}
+function render(force,time){
+ if(!glOK)return;time=time||performance.now();var p=RM?.43:sp;
+ var order=portrait?HANG_P:HANG_L,fr=S0.frames,i;
+ /* wipes */
+ var w1=forced>=0?(forced>=1?1:0):seg(p,W1[0],W1[1]),w2=forced>=0?(forced>=2?1:0):seg(p,W2[0],W2[1]);
+ if(RM&&forced<0){w1=0;w2=0}
+ var X1=w1>0?lerp(-.06,1.06,sm(w1)):-1,X2=w2>0?lerp(-.06,1.06,sm(w2)):-1;
+ var U=S0.plateMat.uniforms;
+ if(w2>0){U.uA.value.set(PAL[1].wall);U.uB.value.set(PAL[2].wall);U.uW.value=X2}
+ else{U.uA.value.set(PAL[0].wall);U.uB.value.set(PAL[1].wall);U.uW.value=X1}
+ U.uSun.value.set(.18+.5*(.5+.5*Math.sin(time*.00012)),.78);
+ /* prints: hang one by one, swing to rest */
+ for(i=0;i<fr.length;i++){
+  var F=fr[i],o=order.indexOf(i),t=RM?1:seg(p,.09+o*.04,.09+o*.04+.105),e=eo(t),f=F.f;
+  F.piv.visible=t>.002;
+  var top=PH-(f.y-f.h/2);
+  var lift=(1-e)*(PH*.75);
+  F.piv.position.set(f.x,top+lift,2);
+  var sw=Math.pow(1-t,2.2)*Math.sin(t*15)*.2;F.piv.rotation.z=sw*(o%2?-1:1);F.piv.rotation.x=(1-e)*.35;
+  var lf=1-t;F.sh.material.opacity=.34*(1-lf*.6);F.sh.position.set(5+lf*16,-7-lf*26,-.5);F.sh.scale.setScalar(1+lf*.25);
+  /* palette */
+  var t1=sm(clamp((X1-(F.fx-.035))/.07)),t2=sm(clamp((X2-(F.fx-.035))/.07));
+  var um=F.am.uniforms;
+  if(w2>0){um.tA.value=F.ta[1];um.tB.value=F.ta[2];um.uMix.value=t2}else{um.tA.value=F.ta[0];um.tB.value=F.ta[1];um.uMix.value=t1}
+  um.uShift.value=-.4+p*2.6+i*.07;
+  if(F.custom){um.tA.value=F.custom;um.tB.value=F.custom;um.uMix.value=0}
+ }
+ setCam(p,time);S0.plateMat.uniforms.uT.value=time*.001;
+ S0.renderer.render(S0.scene,S0.cam);
+ /* ui */
+ var s=stick.style;s.setProperty("--p",p.toFixed(4));
+ var hero=$("hero");var ho=1-seg(p,.025,.085);hero.style.opacity=ho.toFixed(3);hero.style.visibility=ho<.02?"hidden":"visible";hero.style.transform="translateY("+(-seg(p,0,.09)*40).toFixed(1)+"px)";
+ var cue=document.querySelector(".cue");if(cue)cue.style.opacity=(1-seg(p,.0,.04)).toFixed(2);
+ CAPS.forEach(function(r,k){var a=Math.min(seg(p,r[0]-.02,r[0]),1-seg(p,r[1],r[1]+.02));$("c"+k).style.visibility=a<.01?"hidden":"visible";$("c"+k).style.setProperty("--o",clamp(a).toFixed(3));$("c"+k).classList.toggle("live",a>.6)});
+ var chips=$("chips"),co=(RM||forced>=0)?1:Math.min(seg(p,.5,.57),1-seg(p,.9,.935));
+ chips.style.setProperty("--co",clamp(co).toFixed(3));chips.classList.toggle("on",co>.5);
+ var st=w2>.5?2:(w1>.5?1:0);[].forEach.call(chips.children,function(b,k){b.setAttribute("aria-pressed",String(k===st))});
+}
+
+/* ============ scroll -> progress (smoothed so it feels like inertia, fully reversible) ============ */
+function rawProgress(){var r=track.getBoundingClientRect(),tot=track.offsetHeight-vh;return tot<=0?0:clamp(-r.top/tot)}
+var vis=true,raf=0;
+var lastR=0;
+function frame(t){raf=0;if(!glOK)return;
+ target=rawProgress();var d=target-sp,idle=Math.abs(d)<.00005;
+ /* nothing is scrolling: redraw at about 15 frames a second for the slow light drift, which saves battery */
+ if(idle&&lastR&&t-lastR<66){if(vis&&!RM)raf=requestAnimationFrame(frame);return}
+ sp=idle?target:sp+d*(1-Math.pow(.0009,(t-(lastT||t))/1000)||.14);lastT=t;lastR=t;
+ render(false,t);if(vis&&!RM)raf=requestAnimationFrame(frame)}
+function kick(){if(!raf)raf=requestAnimationFrame(frame)}
+addEventListener("scroll",function(){if(RM){return}kick()},{passive:true});
+addEventListener("resize",function(){resize()});
+if("IntersectionObserver" in window)new IntersectionObserver(function(es){vis=es[0].isIntersecting;if(vis&&!RM)kick()}).observe(stick);
+
+/* chips: scroll to that paint (or switch instantly with reduced motion) */
+[].forEach.call(document.querySelectorAll(".chip"),function(b){b.addEventListener("click",function(){
+ var i=+b.dataset.i;if(RM||!glOK){forced=i;render(true);return}
+ var tot=track.offsetHeight-vh,at=[.55,.72,.9][i],y=track.getBoundingClientRect().top+scrollY+tot*at;scrollTo({top:y,behavior:"smooth"})})});
+
+/* ============ hero shortcut: jump to the wall for your own picture ============ */
+$("heroTry").addEventListener("click",function(){var tot=track.offsetHeight-vh,y=track.getBoundingClientRect().top+scrollY+tot*.955;scrollTo({top:y,behavior:RM?"auto":"smooth"})});
+/* ============ hang my own art ============ */
+(function(){
+ var btn=$("tryBtn"),up=$("up"),note=$("tryNote");
+ btn.addEventListener("click",function(){if(!glOK){note.textContent="The room needs WebGL for this. Your browser does not have it.";return}up.click()});
+ up.addEventListener("change",function(){
+  var f=up.files&&up.files[0];if(!f)return;
+  var url=URL.createObjectURL(f),im=new Image();
+  im.onload=function(){var F=S0.frames[1],c=mk(F.aw,F.ah),g=c.getContext("2d"),r=Math.max(F.aw/im.width,F.ah/im.height),w=im.width*r,h=im.height*r;
+   g.drawImage(im,(F.aw-w)/2,(F.ah-h)/2,w,h);F.custom=tex(window.THREE,c,S0.gl2,S0.an);URL.revokeObjectURL(url);render(true);
+   note.textContent="Hung in the middle. Scroll up and down to see it with every paint."};
+  im.onerror=function(){URL.revokeObjectURL(url);note.textContent="That file would not open. Try a JPG or PNG."};
+  im.src=url;up.value="";
+ });
+})();
+
+/* ============ boot ============ */
+if(typeof THREE==="undefined"){noGL()}
+else{
+ var img=new Image(),mimg=new Image(),loaded=0;img.decoding=mimg.decoding="async";
+ function ready(){if(++loaded<2)return;try{start(img,mimg);if(glOK&&!RM){sp=rawProgress();kick()}}catch(e){console.error(e);noGL()}}
+ img.onload=mimg.onload=ready;img.onerror=mimg.onerror=function(){noGL()};
+ img.src="img/plate.jpg";mimg.src="img/wall-mask.png";
+}
+})();
+</script>
+</body>
+</html>
