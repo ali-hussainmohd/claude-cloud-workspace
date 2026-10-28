@@ -249,7 +249,7 @@ footer a{color:#F8F4EC;text-decoration-thickness:1px;text-underline-offset:3px}
   <div class="chips pill" id="chips" role="group" aria-label="Wall paint">
    <button class="chip" type="button" data-i="0" aria-pressed="true"><i style="background:#E6DDCF"></i>Plaster</button>
    <button class="chip" type="button" data-i="1" aria-pressed="false"><i style="background:#A9BBA0"></i>Sage</button>
-   <button class="chip" type="button" data-i="2" aria-pressed="false"><i style="background:#B98F74"></i>Clay</button>
+   <button class="chip" type="button" data-i="2" aria-pressed="false"><i style="background:#B88768"></i>Clay</button>
   </div>
   <div class="cap pill" id="c0" data-n="01 · See it"><h2>Your buyers see your art on a real wall before they pay.</h2><p>An example: the Quiet Corner Gallery Bundle, 24 prints, 3 palettes, 5 sizes, $19.</p></div>
   <div class="cap pill" id="c1" data-n="02 · Check the detail"><h2>They can see the brushwork, the mat and the glass.</h2><p>Every size from 5x7 to 24x36 looks as it will on their wall.</p></div>
@@ -277,7 +277,7 @@ footer a{color:#F8F4EC;text-decoration-thickness:1px;text-underline-offset:3px}
       <p class="tag">Example product</p>
       <h3>The Quiet Corner Gallery Bundle</h3>
       <p class="blurb">24 prints, 3 wall colours, 5 sizes. Instant download.</p>
-      <div class="swatch-row" aria-hidden="true"><i style="background:#E6DDCF"></i><i style="background:#A9BBA0"></i><i style="background:#B98F74"></i></div>
+      <div class="swatch-row" aria-hidden="true"><i style="background:#E6DDCF"></i><i style="background:#A9BBA0"></i><i style="background:#B88768"></i></div>
       <div class="row"><span class="pr">$19</span><span class="add" aria-hidden="true">Add to cart</span></div>
      </div>
     </div>
@@ -342,7 +342,7 @@ footer a{color:#F8F4EC;text-decoration-thickness:1px;text-underline-offset:3px}
     <div class="hues" role="group" aria-label="Colours you love">
      <button class="hue" type="button" data-c="chalk" aria-pressed="false"><i style="background:#DBCDBF"></i><span>Plaster</span></button>
      <button class="hue" type="button" data-c="sage" aria-pressed="false"><i style="background:#AEB89F"></i><span>Sage</span></button>
-     <button class="hue" type="button" data-c="denim" aria-pressed="false"><i style="background:#B98F74"></i><span>Clay</span></button>
+     <button class="hue" type="button" data-c="denim" aria-pressed="false"><i style="background:#B88768"></i><span>Clay</span></button>
      <button class="hue" type="button" data-c="ink" aria-pressed="false"><i style="background:#2B2622"></i><span>Ink</span></button>
     </div></fieldset>
   </div>
@@ -422,7 +422,7 @@ $("copy").addEventListener("click",function(){
 var PAL=[
  {wall:"#DBCDBF",paper:"#F3F3EE",a:"#4F5A3E",b:"#B9AE9E",c:"#5F7459",d:"#E1D3BC",ink:"#2B2622"},
  {wall:"#AEB89F",paper:"#EFF2EA",a:"#5F7459",b:"#C8D4C0",c:"#2D4A40",d:"#E8DAC6",ink:"#1B2A25"},
- {wall:"#B98F74",paper:"#EDEBE4",a:"#5B4636",b:"#D2C6AC",c:"#A9BBA0",d:"#D9B98A",ink:"#211C18"}];
+ {wall:"#B88768",paper:"#EDEBE4",a:"#5B4636",b:"#D2C6AC",c:"#A9BBA0",d:"#D9B98A",ink:"#211C18"}];
 function mk(w,h){var c=document.createElement("canvas");c.width=Math.max(2,Math.round(w));c.height=Math.max(2,Math.round(h));return c}
 var noiseTile=(function(){var c=mk(128,128),g=c.getContext("2d"),d=g.createImageData(128,128),r=rng(7);for(var i=0;i<d.data.length;i+=4){var v=226+r()*29;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}g.putImageData(d,0,0);return c})();
 
@@ -479,8 +479,8 @@ function shadowTex(){var c=mk(256,256),g=c.getContext("2d");g.fillStyle="#000";g
 var PW=2000,PH=1333;
 /* seven prints: center x,y in photo pixels, outer size, style, art kind */
 var FR=[
- {x:683,y:480,w:252,h:331,st:BLACK,k:0},{x:1003,y:480,w:250,h:329,st:BLACK,k:1},{x:1323,y:480,w:254,h:333,st:BLACK,k:2},
- {x:755,y:775,w:128,h:171,st:OAK,k:3},{x:920,y:775,w:128,h:171,st:OAK,k:4},{x:1085,y:775,w:128,h:171,st:OAK,k:5},{x:1250,y:775,w:128,h:171,st:OAK,k:6}];
+ {x:739,y:440,w:224,h:294,st:BLACK,k:0},{x:1003,y:440,w:224,h:294,st:BLACK,k:1},{x:1267,y:440,w:224,h:294,st:BLACK,k:2},
+ {x:799,y:690,w:112,h:150,st:OAK,k:3},{x:947,y:690,w:112,h:150,st:OAK,k:4},{x:1095,y:690,w:112,h:150,st:OAK,k:5},{x:1243,y:690,w:112,h:150,st:OAK,k:6}];
 var HANG_L=[1,0,2,3,4,5,6],HANG_P=[0,1,2,3,4,5,6];
 
 var S0={};              /* scene state */
@@ -544,8 +544,8 @@ function start(img,maskImg){
 }
 
 /* ============ camera ============ */
-var KL=[[0,1040,640,1100],[.09,1030,580,900],[.42,1010,580,860],[.50,1003,480,560],[.56,1003,480,560],[.63,1010,590,880],[.88,1010,590,880],[1,1040,660,1160]];
-var KP=[[0,1003,820,1010],[.09,683,520,760],[.17,683,520,760],[.24,1003,520,760],[.31,1323,520,760],[.38,1003,620,1000],[.44,1003,640,1333],[.50,1003,500,700],[.56,1003,500,700],[.58,600,620,1100],[.70,1500,620,1100],[.74,600,620,1100],[.86,1500,620,1100],[.93,1003,640,1333],[1,1003,640,1333]];
+var KL=[[0,1040,640,1100],[.09,1030,560,820],[.42,1010,560,760],[.50,1003,440,500],[.56,1003,440,500],[.63,1010,560,780],[.88,1010,560,780],[1,1040,660,1160]];
+var KP=[[0,1003,820,1010],[.09,739,500,640],[.17,739,500,640],[.24,1003,500,640],[.31,1267,500,640],[.38,1003,560,900],[.44,1003,600,1100],[.50,1003,470,640],[.56,1003,470,640],[.58,600,620,1100],[.70,1500,620,1100],[.74,600,620,1100],[.86,1500,620,1100],[.93,1003,640,1333],[1,1003,640,1333]];
 function camAt(K,p){var i=0;while(i<K.length-2&&p>K[i+1][0])i++;var a=K[i],b=K[i+1],t=sm5(seg(p,a[0],b[0]));return[lerp(a[1],b[1],t),lerp(a[2],b[2],t),lerp(a[3],b[3],t)]}
 
 /* ============ one function maps scroll progress to everything on screen ============ */
