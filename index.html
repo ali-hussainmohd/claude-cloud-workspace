@@ -41,7 +41,7 @@ a{color:inherit}
 .stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:#d9d5d0 url(img/plate.jpg) center/cover no-repeat;isolation:isolate}
 #gl{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .9s ease}
 .ready #gl{opacity:1}
-.lightfall{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 38% 50% at 80% 34%,rgba(255,206,140,.20),transparent 70%),radial-gradient(ellipse 70% 60% at 50% 28%,rgba(255,240,214,.20),transparent 72%),radial-gradient(ellipse 120% 90% at 50% 45%,transparent 55%,rgba(33,28,24,.26)),linear-gradient(to bottom,transparent 60%,rgba(33,28,24,.16))}
+.lightfall{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 70% 60% at 50% 28%,rgba(255,240,214,.20),transparent 72%),radial-gradient(ellipse 120% 90% at 50% 45%,transparent 55%,rgba(33,28,24,.26)),linear-gradient(to bottom,transparent 60%,rgba(33,28,24,.16))}
 #gl{z-index:0}
 .vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(20,24,36,.2) 100%)}
 .shade{position:absolute;left:0;right:0;bottom:0;height:36%;pointer-events:none;background:linear-gradient(to top,rgba(20,24,36,.3),rgba(20,24,36,0))}
@@ -340,7 +340,7 @@ footer a{color:#F8F4EC;text-decoration-thickness:1px;text-underline-offset:3px}
     </div></fieldset>
    <fieldset class="rv"><legend>Colours you love</legend>
     <div class="hues" role="group" aria-label="Colours you love">
-     <button class="hue" type="button" data-c="chalk" aria-pressed="false"><i style="background:#DBCDBF"></i><span>Plaster</span></button>
+     <button class="hue" type="button" data-c="chalk" aria-pressed="false"><i style="background:#D2C6B6"></i><span>Plaster</span></button>
      <button class="hue" type="button" data-c="sage" aria-pressed="false"><i style="background:#AEB89F"></i><span>Sage</span></button>
      <button class="hue" type="button" data-c="denim" aria-pressed="false"><i style="background:#B88768"></i><span>Clay</span></button>
      <button class="hue" type="button" data-c="ink" aria-pressed="false"><i style="background:#2B2622"></i><span>Ink</span></button>
@@ -420,7 +420,7 @@ $("copy").addEventListener("click",function(){
 
 /* ============ palettes: wall paint + print colours ============ */
 var PAL=[
- {wall:"#DBCDBF",paper:"#F3F3EE",a:"#4F5A3E",b:"#B9AE9E",c:"#5F7459",d:"#E1D3BC",ink:"#2B2622"},
+ {wall:"#D2C6B6",paper:"#F3F3EE",a:"#4F5A3E",b:"#B9AE9E",c:"#5F7459",d:"#E1D3BC",ink:"#2B2622"},
  {wall:"#AEB89F",paper:"#EFF2EA",a:"#5F7459",b:"#C8D4C0",c:"#2D4A40",d:"#E8DAC6",ink:"#1B2A25"},
  {wall:"#B88768",paper:"#EDEBE4",a:"#5B4636",b:"#D2C6AC",c:"#A9BBA0",d:"#D9B98A",ink:"#211C18"}];
 function mk(w,h){var c=document.createElement("canvas");c.width=Math.max(2,Math.round(w));c.height=Math.max(2,Math.round(h));return c}
@@ -479,8 +479,8 @@ function shadowTex(){var c=mk(256,256),g=c.getContext("2d");g.fillStyle="#000";g
 var PW=2000,PH=1333;
 /* seven prints: center x,y in photo pixels, outer size, style, art kind */
 var FR=[
- {x:739,y:440,w:224,h:294,st:BLACK,k:0},{x:1003,y:440,w:224,h:294,st:BLACK,k:1},{x:1267,y:440,w:224,h:294,st:BLACK,k:2},
- {x:799,y:690,w:112,h:150,st:OAK,k:3},{x:947,y:690,w:112,h:150,st:OAK,k:4},{x:1095,y:690,w:112,h:150,st:OAK,k:5},{x:1243,y:690,w:112,h:150,st:OAK,k:6}];
+ {x:874,y:338,w:200,h:262,st:BLACK,k:0},{x:1100,y:338,w:200,h:262,st:BLACK,k:1},{x:1326,y:338,w:200,h:262,st:BLACK,k:2},
+ {x:911,y:562,w:100,h:134,st:OAK,k:3},{x:1037,y:562,w:100,h:134,st:OAK,k:4},{x:1163,y:562,w:100,h:134,st:OAK,k:5},{x:1289,y:562,w:100,h:134,st:OAK,k:6}];
 var HANG_L=[1,0,2,3,4,5,6],HANG_P=[0,1,2,3,4,5,6];
 
 var S0={};              /* scene state */
@@ -520,9 +520,9 @@ function start(img,maskImg){
  var scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(26,1,50,20000);
  /* plate and wall mask were prepared ahead of time, so nothing heavy runs here */
  var plateTex=imgTex(THREE,img,gl2,an),maskTex=imgTex(THREE,maskImg,false,1);maskTex.minFilter=maskTex.magFilter=THREE.LinearFilter;maskTex.generateMipmaps=false;
- var plateMat=new THREE.ShaderMaterial({vertexShader:VS,fragmentShader:FS_PLATE,uniforms:{tP:{value:plateTex},tM:{value:maskTex},uA:{value:new THREE.Color(PAL[0].wall)},uB:{value:new THREE.Color(PAL[0].wall)},uW:{value:-1},uRef:{value:0.8148},uT:{value:0},uSun:{value:new THREE.Vector2(.3,.7)}},transparent:true,depthTest:false,depthWrite:false});
+ var plateMat=new THREE.ShaderMaterial({vertexShader:VS,fragmentShader:FS_PLATE,uniforms:{tP:{value:plateTex},tM:{value:maskTex},uA:{value:new THREE.Color(PAL[0].wall)},uB:{value:new THREE.Color(PAL[0].wall)},uW:{value:-1},uRef:{value:0.77},uT:{value:0},uSun:{value:new THREE.Vector2(.3,.7)}},transparent:true,depthTest:false,depthWrite:false});
  var plate=new THREE.Mesh(new THREE.PlaneGeometry(PW,PH),plateMat);plate.position.set(PW/2,PH/2,0);plate.renderOrder=0;scene.add(plate);
- var sofaTex=imgTex(THREE,SOFA,gl2,an),sofa=new THREE.Mesh(new THREE.PlaneGeometry(SOFA.width,SOFA.height),new THREE.MeshBasicMaterial({map:sofaTex,transparent:true,depthTest:false,depthWrite:false}));sofa.position.set(420+SOFA.width/2,PH-(870+SOFA.height/2),1);sofa.renderOrder=2;scene.add(sofa);
+ var sofaTex=imgTex(THREE,SOFA,gl2,an),sofa=new THREE.Mesh(new THREE.PlaneGeometry(SOFA.width,SOFA.height),new THREE.MeshBasicMaterial({map:sofaTex,transparent:true,depthTest:false,depthWrite:false}));sofa.position.set(560+SOFA.width/2,PH-(612+SOFA.height/2),1);sofa.renderOrder=2;scene.add(sofa);
  /* frames */
  var shTex=new THREE.CanvasTexture(shadowTex()),shTex2=new THREE.CanvasTexture(shadowTex2());var SC=2.4,frames=[];
  FR.forEach(function(f,i){
@@ -545,8 +545,8 @@ function start(img,maskImg){
 }
 
 /* ============ camera ============ */
-var KL=[[0,1040,640,1100],[.09,1030,560,820],[.42,1010,560,760],[.50,1003,440,500],[.56,1003,440,500],[.63,1010,560,780],[.88,1010,560,780],[1,1040,660,1160]];
-var KP=[[0,1003,820,1010],[.09,739,500,640],[.17,739,500,640],[.24,1003,500,640],[.31,1267,500,640],[.38,1003,560,900],[.44,1003,600,1100],[.50,1003,470,640],[.56,1003,470,640],[.58,600,620,1100],[.70,1500,620,1100],[.74,600,620,1100],[.86,1500,620,1100],[.93,1003,640,1333],[1,1003,640,1333]];
+var KL=[[0,800,640,1000],[.09,1100,490,900],[.42,1100,490,820],[.50,1100,400,520],[.56,1100,400,520],[.63,1100,490,880],[.88,1100,490,880],[1,1100,700,1250]];
+var KP=[[0,1100,450,900],[.09,874,420,560],[.17,874,420,560],[.24,1100,420,560],[.31,1326,420,560],[.38,1100,500,900],[.44,1100,620,1100],[.50,1100,400,560],[.56,1100,400,560],[.58,800,620,1100],[.70,1400,620,1100],[.74,800,620,1100],[.86,1400,620,1100],[.93,1100,640,1333],[1,1100,640,1333]];
 function camAt(K,p){var i=0;while(i<K.length-2&&p>K[i+1][0])i++;var a=K[i],b=K[i+1],t=sm5(seg(p,a[0],b[0]));return[lerp(a[1],b[1],t),lerp(a[2],b[2],t),lerp(a[3],b[3],t)]}
 
 /* ============ one function maps scroll progress to everything on screen ============ */
