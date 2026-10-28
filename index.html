@@ -71,6 +71,11 @@ a{color:inherit}
 .cap p{margin-top:8px;color:#4A5268;font-size:.95rem;line-height:1.5}
 .cap .try{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:16px;pointer-events:none}
 .cap.live .try{pointer-events:auto}
+.cap{width:min(236px,calc(100% - 2*var(--gut)));padding:13px 15px 15px;bottom:max(8vh,30px)}
+.cap h2{font-size:1.15rem;line-height:1.2}
+.cap p{margin-top:6px;font-size:.84rem;line-height:1.45}
+.cap .try{margin-top:12px}
+@media(max-width:780px){.cap{width:min(208px,62vw);padding:11px 13px 13px;bottom:max(2.5vh,14px)}.cap h2{font-size:1rem}.cap p{font-size:.78rem;margin-top:5px}.cap#c3{width:min(236px,70vw)}}
 .try .btn{min-height:44px;padding:0 18px}
 .try span{font-size:.84rem;color:#454E66;max-width:15em;line-height:1.35}
 .bar{position:absolute;z-index:6;left:0;top:0;height:3px;width:calc(var(--p,0)*100%);background:#3F4E73}
