@@ -41,6 +41,8 @@ a{color:inherit}
 .stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:#d9d5d0 url(img/plate.jpg) center/cover no-repeat;isolation:isolate}
 #gl{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .9s ease}
 .ready #gl{opacity:1}
+.lightfall{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 70% 60% at 50% 28%,rgba(255,240,214,.20),transparent 72%),radial-gradient(ellipse 120% 90% at 50% 45%,transparent 55%,rgba(12,16,30,.26)),linear-gradient(to bottom,transparent 60%,rgba(12,16,30,.16))}
+#gl{z-index:0}
 .vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(20,24,36,.2) 100%)}
 .shade{position:absolute;left:0;right:0;bottom:0;height:36%;pointer-events:none;background:linear-gradient(to top,rgba(20,24,36,.3),rgba(20,24,36,0))}
 .grain{position:absolute;inset:-50%;width:200%;height:200%;pointer-events:none;opacity:.07;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
@@ -52,7 +54,7 @@ a{color:inherit}
 .navlink{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;font:500 .93rem var(--sans);text-decoration:none}
 .navlink.pill{background:#1B2234;color:#F5F6F3;box-shadow:none}
 .hero{position:absolute;z-index:3;left:var(--gut);right:var(--gutr);top:17%;text-align:left;color:#1B2234;pointer-events:none;will-change:opacity,transform}
-.hero h1{font-weight:400;font-size:clamp(3rem,7.6vw,7.6rem);max-width:9.2em;letter-spacing:-.03em;line-height:.97}
+.hero h1{font-weight:400;font-size:clamp(3rem,6vw,6rem);max-width:8.6em;letter-spacing:-.03em;line-height:.97}
 .hero p.lead{margin:24px 0 0;max-width:30em;font-size:clamp(1.08rem,1.7vw,1.3rem);color:#2E3750}
 .hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
 .hero .btn{pointer-events:auto;min-height:56px;padding:0 30px;font-size:1.04rem}
@@ -211,26 +213,27 @@ footer a{color:#F5F6F3;text-decoration-thickness:1px;text-underline-offset:3px}
 @media(max-width:780px){.letter{transform:none}.track{height:560vh}.hero{top:18%}.hero h1{font-size:clamp(2.9rem,13vw,4rem)}.cap{bottom:max(3vh,16px)}.cue{display:none}.chip{padding:0 11px;font-size:.78rem}.navlink{display:none}.hero .ctas{gap:10px}}
 @media(prefers-reduced-motion:reduce){.rv,.hang.rv{opacity:1;transform:none;transition:none}.cue b{animation:none}#gl{transition:none}.track{height:auto}.stick{height:100svh}.btn{transition:none}}
 /* wall-label captions: no box, type sits on the wall like a gallery placard */
-.cap.pill{background:none!important;box-shadow:none!important;border-radius:0;padding:14px 0 0 0;width:min(300px,calc(100% - 2*var(--gut)));color:#1B2234;border-top:1px solid rgba(27,34,52,.55)}
-.cap.pill h2{font-size:1.28rem;text-shadow:0 0 18px rgba(232,234,228,.95),0 0 6px rgba(232,234,228,.8)}
-.cap.pill p{color:#2C3550;font-size:.88rem;text-shadow:0 0 14px rgba(232,234,228,.95),0 0 5px rgba(232,234,228,.8)}
-.cap.pill:before{content:attr(data-n);display:block;font:500 .68rem/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;margin-bottom:9px;color:#3F4E73}
+.cap.pill{background:none!important;box-shadow:none!important;border-radius:0;padding:14px 0 0 0;width:min(262px,calc(100% - 2*var(--gut)));color:#1B2234;border-top:1px solid rgba(27,34,52,.55)}
+.cap.pill h2{font-size:1.4rem;text-shadow:0 0 18px rgba(232,234,228,.95),0 0 6px rgba(232,234,228,.8)}
+.cap.pill p{color:#1E2740;font-size:.95rem;text-shadow:0 0 14px rgba(232,234,228,.95),0 0 5px rgba(232,234,228,.8)}
+.cap.pill:before{content:attr(data-n);display:block;font:600 .74rem/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;margin-bottom:9px;color:#3F4E73}
 .cap#c3.pill{color:#F5F6F3;border-top-color:rgba(245,246,243,.6)}
 .cap#c3.pill h2,.cap#c3.pill p{color:#F5F6F3;text-shadow:0 1px 14px rgba(14,20,38,.55)}
 .cap#c3.pill:before{color:#C9D3EA}
 .cap#c3 #tryNote{color:#E3E8F5}
-@media(max-width:780px){.cap.pill{width:min(250px,70vw);padding-top:11px}.cap.pill h2{font-size:1.1rem}.cap.pill p{font-size:.8rem}.cap#c0 p,.cap#c1 p,.cap#c2 p{display:none}}
+@media(max-width:780px){.cap.pill{width:min(250px,70vw);padding-top:11px}.cap.pill h2{font-size:1.15rem}.cap.pill p{font-size:.86rem}.cap#c0 p,.cap#c1 p,.cap#c2 p{display:none}}
 .cap.pill{bottom:max(21vh,90px)}
 @media(max-width:780px){.cap.pill{bottom:max(2.5vh,14px);color:#F5F6F3;border-top-color:rgba(245,246,243,.6);isolation:isolate}
 .cap.pill:after{content:"";position:absolute;z-index:-1;left:calc(-1*var(--gut));right:-100vw;top:-70px;bottom:-16px;background:linear-gradient(to top,rgba(16,23,42,.78) 0,rgba(16,23,42,.6) 55%,rgba(16,23,42,0) 100%)}
 .cap.pill h2,.cap.pill p,.cap#c3 #tryNote{color:#F5F6F3;text-shadow:0 1px 10px rgba(10,15,30,.5)}.cap.pill:before{color:#C9D3EA}.cap#c0 p,.cap#c1 p,.cap#c2 p{display:none}}
-</style>
-<noscript><style>.rv{opacity:1;transform:none}.hero{position:relative;top:auto;padding:100px 16px 30px}.track{height:auto}.stick{height:70svh}.cue{display:none}</style></noscript>
 </head>
 <body>
+</style>
+<noscript><style>.rv{opacity:1;transform:none}.hero{position:relative;top:auto;padding:100px 16px 30px}.track{height:auto}.stick{height:70svh}.cue{display:none}</style></noscript>
 <main>
 <section class="track" id="track" aria-label="Scroll story: prints hang on a wall and the room repaints">
  <div class="stick" id="stick">
+  <div class="lightfall" aria-hidden="true"></div>
   <canvas id="gl" role="img" aria-label="A photographed living room. Seven framed prints hang on the wall one by one, then the wall is repainted three times and the prints change colour with it."></canvas>
   <div class="vig"></div><div class="shade"></div><div class="grain"></div><div class="bar"></div>
   <header class="nav">
@@ -468,13 +471,14 @@ function drawFrame(w,h,S,st){
 var BLACK={rail:.022,mat:.125,rc:["#3A3735","#161412","#0C0B0A"],matc:"#F1ECE1"},
     OAK={rail:.04,mat:.115,rc:["#D9B98A","#C39A62","#A57F4C"],matc:"#F4EFE5"},
     WHITE={rail:.035,mat:.115,rc:["#FFFFFF","#EFEBE3","#DAD4C8"],matc:"#F6F2E9"};
+function shadowTex2(){var c=mk(256,256),g=c.getContext("2d");g.fillStyle="#000";g.shadowColor="#000";g.shadowBlur=7;g.fillRect(84,84,88,88);return c}
 function shadowTex(){var c=mk(256,256),g=c.getContext("2d");g.fillStyle="#000";g.shadowColor="#000";g.shadowBlur=34;g.fillRect(70,70,116,116);return c}
 
 /* ============ the room: plate photo, wall mask, frames ============ */
 var PW=2000,PH=1333;
 /* seven prints: center x,y in photo pixels, outer size, style, art kind */
 var FR=[
- {x:452,y:456,w:325,h:427,st:BLACK,k:0},{x:1002,y:460,w:322,h:426,st:BLACK,k:1},{x:1551,y:459,w:328,h:428,st:BLACK,k:2},
+ {x:452,y:456,w:293,h:384,st:BLACK,k:0},{x:1002,y:460,w:290,h:383,st:BLACK,k:1},{x:1551,y:459,w:295,h:385,st:BLACK,k:2},
  {x:715,y:842,w:142,h:190,st:OAK,k:3},{x:905,y:842,w:142,h:190,st:BLACK,k:4},{x:1095,y:842,w:142,h:190,st:WHITE,k:5},{x:1285,y:842,w:142,h:190,st:OAK,k:6}];
 var HANG_L=[1,0,2,3,4,5,6],HANG_P=[0,1,2,3,4,5,6];
 
@@ -518,7 +522,7 @@ function start(img,maskImg){
  var plateMat=new THREE.ShaderMaterial({vertexShader:VS,fragmentShader:FS_PLATE,uniforms:{tP:{value:plateTex},tM:{value:maskTex},uA:{value:new THREE.Color(PAL[0].wall)},uB:{value:new THREE.Color(PAL[0].wall)},uW:{value:-1},uRef:{value:0.8671},uT:{value:0},uSun:{value:new THREE.Vector2(.3,.7)}},transparent:true,depthTest:false,depthWrite:false});
  var plate=new THREE.Mesh(new THREE.PlaneGeometry(PW,PH),plateMat);plate.position.set(PW/2,PH/2,0);plate.renderOrder=0;scene.add(plate);
  /* frames */
- var shTex=new THREE.CanvasTexture(shadowTex());var SC=2.4,frames=[];
+ var shTex=new THREE.CanvasTexture(shadowTex()),shTex2=new THREE.CanvasTexture(shadowTex2());var SC=2.4,frames=[];
  FR.forEach(function(f,i){
   var big=f.w>200,S=big?SC:3.2,fd=drawFrame(f.w,f.h,S,f.st),win=fd.win;
   var piv=new THREE.Group(),inner=new THREE.Group();piv.add(inner);inner.position.y=-f.h/2;
@@ -530,8 +534,9 @@ function start(img,maskImg){
   var am=new THREE.ShaderMaterial({vertexShader:VS,fragmentShader:FS_ART,uniforms:{tA:{value:ta[0]},tB:{value:ta[1]},uMix:{value:0},uShift:{value:0},uO:{value:1},uWin:{value:new THREE.Vector2(win[2],win[3])}},transparent:true,depthTest:false,depthWrite:false});
   var art=new THREE.Mesh(new THREE.PlaneGeometry(win[2],win[3]),am);art.renderOrder=ro+2;
   art.position.set(win[0]+win[2]/2-f.w/2,f.h/2-(win[1]+win[3]/2),0);
+  var sh2=new THREE.Mesh(new THREE.PlaneGeometry(f.w*1.1,f.h*1.07),new THREE.MeshBasicMaterial({map:shTex2,transparent:true,opacity:.4,depthTest:false,depthWrite:false}));sh2.renderOrder=ro;sh2.position.set(3,-5,-.4);inner.add(sh2);
   inner.add(sh,fm,art);sh.position.set(0,0,0);piv.visible=false;scene.add(piv);
-  frames.push({fm:fm,aw:aw,ah:ah,f:f,piv:piv,inner:inner,sh:sh,am:am,ta:ta,fx:f.x/PW,u:0});
+  frames.push({sh2:sh2,fm:fm,aw:aw,ah:ah,f:f,piv:piv,inner:inner,sh:sh,am:am,ta:ta,fx:f.x/PW,u:0});
  });
  Object.assign(S0,{gl2:gl2,an:an,renderer:renderer,scene:scene,cam:cam,plateMat:plateMat,frames:frames});
  glOK=true;root.classList.add("ready");resize();render(true);
@@ -571,13 +576,13 @@ function render(force,time){
  U.uSun.value.set(.18+.5*(.5+.5*Math.sin(time*.00012)),.78);
  /* prints: hang one by one, swing to rest */
  for(i=0;i<fr.length;i++){
-  var F=fr[i],o=order.indexOf(i),t=RM?1:seg(p,.09+o*.04,.09+o*.04+.12),e=eo(t),f=F.f;
+  var F=fr[i],o=order.indexOf(i),t=RM?1:((i===2&&!portrait)?1:seg(p,.09+o*.04,.09+o*.04+.12)),e=eo(t),f=F.f;
   F.piv.visible=t>.002;
   var top=PH-(f.y-f.h/2);
   var lift=(1-e)*34,fo=clamp(t*2.2);F.fm.material.opacity=fo;F.am.uniforms.uO.value=fo;
   F.piv.position.set(f.x,top+lift,2);
   F.piv.rotation.z=0;F.piv.rotation.x=0;
-  var lf=1-t;F.sh.material.opacity=.34*fo;F.sh.position.set(5+lf*6,-7-lf*10,-.5);F.sh.scale.setScalar(1+lf*.08);
+  var lf=1-t;F.sh2.material.opacity=.4*fo;F.sh.material.opacity=.34*fo;F.sh.position.set(5+lf*6,-7-lf*10,-.5);F.sh.scale.setScalar(1+lf*.08);
   /* palette */
   var t1=sm(clamp((X1-(F.fx-.035))/.07)),t2=sm(clamp((X2-(F.fx-.035))/.07));
   var um=F.am.uniforms;
