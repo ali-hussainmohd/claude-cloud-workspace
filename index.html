@@ -210,6 +210,20 @@ footer a{color:#F5F6F3;text-decoration-thickness:1px;text-underline-offset:3px}
 @media(max-width:560px){.callouts{grid-template-columns:1fr}}
 @media(max-width:780px){.letter{transform:none}.track{height:560vh}.hero{top:18%}.hero h1{font-size:clamp(2.9rem,13vw,4rem)}.cap{bottom:max(3vh,16px)}.cue{display:none}.chip{padding:0 11px;font-size:.78rem}.navlink{display:none}.hero .ctas{gap:10px}}
 @media(prefers-reduced-motion:reduce){.rv,.hang.rv{opacity:1;transform:none;transition:none}.cue b{animation:none}#gl{transition:none}.track{height:auto}.stick{height:100svh}.btn{transition:none}}
+/* wall-label captions: no box, type sits on the wall like a gallery placard */
+.cap.pill{background:none!important;box-shadow:none!important;border-radius:0;padding:14px 0 0 0;width:min(300px,calc(100% - 2*var(--gut)));color:#1B2234;border-top:1px solid rgba(27,34,52,.55)}
+.cap.pill h2{font-size:1.28rem;text-shadow:0 0 18px rgba(232,234,228,.95),0 0 6px rgba(232,234,228,.8)}
+.cap.pill p{color:#2C3550;font-size:.88rem;text-shadow:0 0 14px rgba(232,234,228,.95),0 0 5px rgba(232,234,228,.8)}
+.cap.pill:before{content:attr(data-n);display:block;font:500 .68rem/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;margin-bottom:9px;color:#3F4E73}
+.cap#c3.pill{color:#F5F6F3;border-top-color:rgba(245,246,243,.6)}
+.cap#c3.pill h2,.cap#c3.pill p{color:#F5F6F3;text-shadow:0 1px 14px rgba(14,20,38,.55)}
+.cap#c3.pill:before{color:#C9D3EA}
+.cap#c3 #tryNote{color:#E3E8F5}
+@media(max-width:780px){.cap.pill{width:min(250px,70vw);padding-top:11px}.cap.pill h2{font-size:1.1rem}.cap.pill p{font-size:.8rem}.cap#c0 p,.cap#c1 p,.cap#c2 p{display:none}}
+.cap.pill{bottom:max(21vh,90px)}
+@media(max-width:780px){.cap.pill{bottom:max(2.5vh,14px);color:#F5F6F3;border-top-color:rgba(245,246,243,.6);isolation:isolate}
+.cap.pill:after{content:"";position:absolute;z-index:-1;left:calc(-1*var(--gut));right:-100vw;top:-70px;bottom:-16px;background:linear-gradient(to top,rgba(16,23,42,.78) 0,rgba(16,23,42,.6) 55%,rgba(16,23,42,0) 100%)}
+.cap.pill h2,.cap.pill p,.cap#c3 #tryNote{color:#F5F6F3;text-shadow:0 1px 10px rgba(10,15,30,.5)}.cap.pill:before{color:#C9D3EA}.cap#c0 p,.cap#c1 p,.cap#c2 p{display:none}}
 </style>
 <noscript><style>.rv{opacity:1;transform:none}.hero{position:relative;top:auto;padding:100px 16px 30px}.track{height:auto}.stick{height:70svh}.cue{display:none}</style></noscript>
 </head>
@@ -233,10 +247,10 @@ footer a{color:#F5F6F3;text-decoration-thickness:1px;text-underline-offset:3px}
    <button class="chip" type="button" data-i="1" aria-pressed="false"><i style="background:#A9BBA0"></i>Sage</button>
    <button class="chip" type="button" data-i="2" aria-pressed="false"><i style="background:#5A6B90"></i>Denim</button>
   </div>
-  <div class="cap pill" id="c0"><h2>Your buyers see your art on a real wall before they pay.</h2><p>An example: the Quiet Corner Gallery Bundle, 24 prints, 3 palettes, 5 sizes, $19.</p></div>
-  <div class="cap pill" id="c1"><h2>They can judge the paper, the mat and the glass.</h2><p>Every size from 5x7 to 24x36 looks as it will on their wall.</p></div>
-  <div class="cap pill" id="c2"><h2>Three wall colours, one download.</h2><p>Buyers pick the one that matches their room, and every print follows.</p></div>
-  <div class="cap pill" id="c3"><h2>Now try yours.</h2><p>Put one of your own pictures on this wall.</p><div class="try"><button class="btn ink" id="tryBtn" type="button">Hang my own art</button><input id="up" type="file" accept="image/*" hidden><span id="tryNote" role="status" aria-live="polite">It stays on your device.</span></div></div>
+  <div class="cap pill" id="c0" data-n="01 · See it"><h2>Your buyers see your art on a real wall before they pay.</h2><p>An example: the Quiet Corner Gallery Bundle, 24 prints, 3 palettes, 5 sizes, $19.</p></div>
+  <div class="cap pill" id="c1" data-n="02 · Check the detail"><h2>They can see the brushwork, the mat and the glass.</h2><p>Every size from 5x7 to 24x36 looks as it will on their wall.</p></div>
+  <div class="cap pill" id="c2" data-n="03 · Pick the colour"><h2>Try it on any wall colour.</h2><p>Buyers check the art against the paint in their own room before they pay.</p></div>
+  <div class="cap pill" id="c3" data-n="04 · Your turn"><h2>Now try yours.</h2><p>Put one of your own pictures on this wall.</p><div class="try"><button class="btn ink" id="tryBtn" type="button">Hang my own art</button><input id="up" type="file" accept="image/*" hidden><span id="tryNote" role="status" aria-live="polite">It stays on your device.</span></div></div>
   <div class="cue" aria-hidden="true"><b></b><span>Scroll</span></div>
  </div>
 </section>
@@ -481,15 +495,18 @@ var FS_PLATE=[
 " float d=distance(vUv*vec2(1.5,1.),uSun*vec2(1.5,1.));t*=1.+.06*exp(-d*d*5.);",
 " vec3 o=mix(mix(c,c*(paint/.87),.3),t,m);gl_FragColor=vec4(o,1.);}"].join("\n");
 var FS_ART=[
-"varying vec2 vUv;uniform sampler2D tA,tB;uniform float uMix,uShift;uniform vec2 uWin;",
+"varying vec2 vUv;uniform sampler2D tA,tB;uniform float uMix,uShift,uO;uniform vec2 uWin;",
 "void main(){vec3 col=mix(texture2D(tA,vUv).rgb,texture2D(tB,vUv).rgb,uMix);",
 " float dt=(1.-vUv.y)*uWin.y,dl=vUv.x*uWin.x;col*=1.-.30*exp(-dt/4.5)-.15*exp(-dl/4.5);",
 " float g=exp(-pow((vUv.x*.75+(1.-vUv.y)*.55-uShift)*5.2,2.));col+=.085*g+.02;",
-" gl_FragColor=vec4(col,1.);}"].join("\n");
+" gl_FragColor=vec4(col,uO);}"].join("\n");
 
 function imgTex(THREE,im,gl2,aniso){var t=new THREE.Texture(im);t.minFilter=gl2?THREE.LinearMipmapLinearFilter:THREE.LinearFilter;t.generateMipmaps=!!gl2;t.anisotropy=aniso;t.wrapS=t.wrapT=THREE.ClampToEdgeWrapping;t.needsUpdate=true;return t}
 function tex(THREE,canvasEl,gl2,aniso){var t=new THREE.CanvasTexture(canvasEl);t.minFilter=gl2?THREE.LinearMipmapLinearFilter:THREE.LinearFilter;t.generateMipmaps=!!gl2;t.anisotropy=aniso;t.wrapS=t.wrapT=THREE.ClampToEdgeWrapping;return t}
 
+var ARTS=[];
+function artCanvas(i,W,H){var im=ARTS[i],c=mk(W,H),g=c.getContext("2d"),r=Math.max(W/im.width,H/im.height),w=im.width*r,h=im.height*r;
+ g.drawImage(im,(W-w)/2,(H-h)/2,w,h);g.globalCompositeOperation="multiply";g.globalAlpha=.55;g.fillStyle=g.createPattern(noiseTile,"repeat");g.fillRect(0,0,W,H);return c}
 function start(img,maskImg){
  var THREE=window.THREE,renderer;
  try{renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:false,powerPreference:"high-performance"})}catch(e){noGL();return}
@@ -509,12 +526,12 @@ function start(img,maskImg){
   var sh=new THREE.Mesh(new THREE.PlaneGeometry(f.w*1.3,f.h*1.22),new THREE.MeshBasicMaterial({map:shTex,transparent:true,opacity:.34,depthTest:false,depthWrite:false}));sh.renderOrder=ro;
   var fm=new THREE.Mesh(new THREE.PlaneGeometry(f.w,f.h),new THREE.MeshBasicMaterial({map:tex(THREE,fd.canvas,gl2,an),transparent:true,depthTest:false,depthWrite:false}));fm.renderOrder=ro+1;
   var aw=Math.round(win[2]*S),ah=Math.round(win[3]*S);
-  var ta=PAL.map(function(P,pi){return tex(THREE,paintArt(f.k,aw,ah,P,i+1),gl2,an)});
-  var am=new THREE.ShaderMaterial({vertexShader:VS,fragmentShader:FS_ART,uniforms:{tA:{value:ta[0]},tB:{value:ta[1]},uMix:{value:0},uShift:{value:0},uWin:{value:new THREE.Vector2(win[2],win[3])}},transparent:true,depthTest:false,depthWrite:false});
+  var t0=tex(THREE,artCanvas(i,aw,ah),gl2,an),ta=[t0,t0,t0];
+  var am=new THREE.ShaderMaterial({vertexShader:VS,fragmentShader:FS_ART,uniforms:{tA:{value:ta[0]},tB:{value:ta[1]},uMix:{value:0},uShift:{value:0},uO:{value:1},uWin:{value:new THREE.Vector2(win[2],win[3])}},transparent:true,depthTest:false,depthWrite:false});
   var art=new THREE.Mesh(new THREE.PlaneGeometry(win[2],win[3]),am);art.renderOrder=ro+2;
   art.position.set(win[0]+win[2]/2-f.w/2,f.h/2-(win[1]+win[3]/2),0);
   inner.add(sh,fm,art);sh.position.set(0,0,0);piv.visible=false;scene.add(piv);
-  frames.push({aw:aw,ah:ah,f:f,piv:piv,inner:inner,sh:sh,am:am,ta:ta,fx:f.x/PW,u:0});
+  frames.push({fm:fm,aw:aw,ah:ah,f:f,piv:piv,inner:inner,sh:sh,am:am,ta:ta,fx:f.x/PW,u:0});
  });
  Object.assign(S0,{gl2:gl2,an:an,renderer:renderer,scene:scene,cam:cam,plateMat:plateMat,frames:frames});
  glOK=true;root.classList.add("ready");resize();render(true);
@@ -554,13 +571,13 @@ function render(force,time){
  U.uSun.value.set(.18+.5*(.5+.5*Math.sin(time*.00012)),.78);
  /* prints: hang one by one, swing to rest */
  for(i=0;i<fr.length;i++){
-  var F=fr[i],o=order.indexOf(i),t=RM?1:seg(p,.09+o*.04,.09+o*.04+.105),e=eo(t),f=F.f;
+  var F=fr[i],o=order.indexOf(i),t=RM?1:seg(p,.09+o*.04,.09+o*.04+.12),e=eo(t),f=F.f;
   F.piv.visible=t>.002;
   var top=PH-(f.y-f.h/2);
-  var lift=(1-e)*(PH*.75);
+  var lift=(1-e)*34,fo=clamp(t*2.2);F.fm.material.opacity=fo;F.am.uniforms.uO.value=fo;
   F.piv.position.set(f.x,top+lift,2);
-  var sw=Math.pow(1-t,2.2)*Math.sin(t*15)*.2;F.piv.rotation.z=sw*(o%2?-1:1);F.piv.rotation.x=(1-e)*.35;
-  var lf=1-t;F.sh.material.opacity=.34*(1-lf*.6);F.sh.position.set(5+lf*16,-7-lf*26,-.5);F.sh.scale.setScalar(1+lf*.25);
+  F.piv.rotation.z=0;F.piv.rotation.x=0;
+  var lf=1-t;F.sh.material.opacity=.34*fo;F.sh.position.set(5+lf*6,-7-lf*10,-.5);F.sh.scale.setScalar(1+lf*.08);
   /* palette */
   var t1=sm(clamp((X1-(F.fx-.035))/.07)),t2=sm(clamp((X2-(F.fx-.035))/.07));
   var um=F.am.uniforms;
@@ -621,7 +638,8 @@ $("heroTry").addEventListener("click",function(){var tot=track.offsetHeight-vh,y
 if(typeof THREE==="undefined"){noGL()}
 else{
  var img=new Image(),mimg=new Image(),loaded=0;img.decoding=mimg.decoding="async";
- function ready(){if(++loaded<2)return;try{start(img,mimg);if(glOK&&!RM){sp=rawProgress();kick()}}catch(e){console.error(e);noGL()}}
+ for(var ai=0;ai<7;ai++){(function(k){var a=new Image();a.decoding="async";a.onload=ready;a.onerror=function(){noGL()};a.src="img/art/p"+k+".jpg";ARTS[k]=a})(ai)}
+ function ready(){if(++loaded<9)return;try{start(img,mimg);if(glOK&&!RM){sp=rawProgress();kick()}}catch(e){console.error(e);noGL()}}
  img.onload=mimg.onload=ready;img.onerror=mimg.onerror=function(){noGL()};
  img.src="img/plate.jpg";mimg.src="img/wall-mask.png";
 }
