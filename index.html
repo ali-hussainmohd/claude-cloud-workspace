@@ -509,7 +509,7 @@ var FS_ART=[
 function imgTex(THREE,im,gl2,aniso){var t=new THREE.Texture(im);t.minFilter=gl2?THREE.LinearMipmapLinearFilter:THREE.LinearFilter;t.generateMipmaps=!!gl2;t.anisotropy=aniso;t.wrapS=t.wrapT=THREE.ClampToEdgeWrapping;t.needsUpdate=true;return t}
 function tex(THREE,canvasEl,gl2,aniso){var t=new THREE.CanvasTexture(canvasEl);t.minFilter=gl2?THREE.LinearMipmapLinearFilter:THREE.LinearFilter;t.generateMipmaps=!!gl2;t.anisotropy=aniso;t.wrapS=t.wrapT=THREE.ClampToEdgeWrapping;return t}
 
-var ARTS=[];
+var ARTS=[],SOFA=new Image();
 function artCanvas(i,W,H){var im=ARTS[i],c=mk(W,H),g=c.getContext("2d"),r=Math.max(W/im.width,H/im.height),w=im.width*r,h=im.height*r;
  g.drawImage(im,(W-w)/2,(H-h)/2,w,h);g.globalCompositeOperation="multiply";g.globalAlpha=.55;g.fillStyle=g.createPattern(noiseTile,"repeat");g.fillRect(0,0,W,H);return c}
 function start(img,maskImg){
@@ -522,6 +522,7 @@ function start(img,maskImg){
  var plateTex=imgTex(THREE,img,gl2,an),maskTex=imgTex(THREE,maskImg,false,1);maskTex.minFilter=maskTex.magFilter=THREE.LinearFilter;maskTex.generateMipmaps=false;
  var plateMat=new THREE.ShaderMaterial({vertexShader:VS,fragmentShader:FS_PLATE,uniforms:{tP:{value:plateTex},tM:{value:maskTex},uA:{value:new THREE.Color(PAL[0].wall)},uB:{value:new THREE.Color(PAL[0].wall)},uW:{value:-1},uRef:{value:0.8148},uT:{value:0},uSun:{value:new THREE.Vector2(.3,.7)}},transparent:true,depthTest:false,depthWrite:false});
  var plate=new THREE.Mesh(new THREE.PlaneGeometry(PW,PH),plateMat);plate.position.set(PW/2,PH/2,0);plate.renderOrder=0;scene.add(plate);
+ var sofaTex=imgTex(THREE,SOFA,gl2,an),sofa=new THREE.Mesh(new THREE.PlaneGeometry(SOFA.width,SOFA.height),new THREE.MeshBasicMaterial({map:sofaTex,transparent:true,depthTest:false,depthWrite:false}));sofa.position.set(420+SOFA.width/2,PH-(870+SOFA.height/2),1);sofa.renderOrder=2;scene.add(sofa);
  /* frames */
  var shTex=new THREE.CanvasTexture(shadowTex()),shTex2=new THREE.CanvasTexture(shadowTex2());var SC=2.4,frames=[];
  FR.forEach(function(f,i){
@@ -645,9 +646,9 @@ if(typeof THREE==="undefined"){noGL()}
 else{
  var img=new Image(),mimg=new Image(),loaded=0;img.decoding=mimg.decoding="async";
  for(var ai=0;ai<7;ai++){(function(k){var a=new Image();a.decoding="async";a.onload=ready;a.onerror=function(){noGL()};a.src="img/art/p"+k+".jpg";ARTS[k]=a})(ai)}
- function ready(){if(++loaded<9)return;try{start(img,mimg);if(glOK&&!RM){sp=rawProgress();kick()}}catch(e){console.error(e);noGL()}}
+ function ready(){if(++loaded<10)return;try{start(img,mimg);if(glOK&&!RM){sp=rawProgress();kick()}}catch(e){console.error(e);noGL()}}
  img.onload=mimg.onload=ready;img.onerror=mimg.onerror=function(){noGL()};
- img.src="img/plate.jpg";mimg.src="img/wall-mask.png";
+ SOFA.onload=ready;SOFA.onerror=function(){noGL()};SOFA.src="img/sofa.png";img.src="img/plate.jpg";mimg.src="img/wall-mask.png";
 }
 })();
 </script>
